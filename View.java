@@ -49,7 +49,7 @@ class View extends JPanel
 	}
 	public void paintComponent(Graphics g)
    	{
-        	g.setColor(new Color(128, 255, 255));
+        g.setColor(new Color(128, 255, 255));
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 		//scale(loadUpImage, 3487, 2221);
 		g.drawImage(this.scale(loadUpImage, 1200, 700), 0, 0, null);
