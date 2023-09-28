@@ -8,8 +8,8 @@ public class DBController {
     public void update() {
     // Database connection parameters
     String dbUrl = "jdbc:postgresql://db.svqkitqdhlcpelzuhcqg.supabase.co:5432/postgres";
-    String username = "EvanMBonar";
-    String password = "Hubguy36!";
+    String username = "postgres";
+    String password = "Fall2023Team7";
 
     // SQL query to retrieve data
     String query = "INSERT INTO player VALUES(1, Evan, Joe, Hitman);" ;
