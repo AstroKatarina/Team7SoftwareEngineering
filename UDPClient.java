@@ -1,39 +1,46 @@
-// Java program to illustrate Server side
-// Implementation using DatagramSocket
 import java.net.*;
 import java.io.*;
+import java.util.Scanner;
 
+public class UDPClient {
+        public static void main(String[] args) throws IOException{
+           
+            DatagramSocket socket = new DatagramSocket();
 
-public class UDPServer {
-    public static void main(String[] args) {
-        DatagramSocket socket = null;
+            // Define the server address and port (e.g., localhost and 12345)
+            InetAddress serverAddress = InetAddress.getByName("10.35.11.109");
+            int serverPort = 7500;
+            
+            // To recieve int:int information later
+            // int receivePort = 7501;
+           
+            // Initializing packet to null
+            byte buf[] = null;
 
-        try {
-            // Create a UDP socket to listen on a specific port (e.g., 12345)
-            socket = new DatagramSocket(7500);
+            // Call method to get equipment code
+            int code = getEquipmentID();
 
-            byte[] receiveData = new byte[1024];
+            // Convert int code to string to be sent over UDP
+            String stringCode = Integer.toString(code);
 
-            while (true) {
-                DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+            // while(true) {
 
-                // Wait for a UDP packet to arrive
-                socket.receive(receivePacket);
+                // Convert the String input into the byte array.
+                buf = stringCode.getBytes();
 
-                String message = new String(receivePacket.getData(), 0, receivePacket.getLength());
-                System.out.println("Received message from client: " + message);
+                // Create a UDP packet with the message and send it to the server
+                DatagramPacket sendPacket = new DatagramPacket(buf, buf.length, serverAddress, serverPort);
+                socket.send(sendPacket);
+                
+                // Error checking
+                System.out.println("Sent message to server: " + code);
 
-                // You can process the received message here
-
-                // Clear the receive buffer for the next message
-                receiveData = new byte[1024];
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (socket != null && !socket.isClosed()) {
-                socket.close();
-            }
+            // Close the socket    
+            socket.close();
         }
-    }
+
+        private static int getEquipmentID(){
+            int ECode = 0;
+            return ECode;
+        }
 }
