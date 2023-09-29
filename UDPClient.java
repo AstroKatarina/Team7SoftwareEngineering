@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.Scanner;
 
 public class UDPClient {
-        public static void main(String[] args) throws IOException{
+        public static void sendData(int Ecode) throws IOException{
            
             DatagramSocket socket = new DatagramSocket();
 
@@ -18,7 +18,7 @@ public class UDPClient {
             byte buf[] = null;
 
             // Call method to get equipment code
-            int code = getEquipmentID();
+            int code = Ecode;
 
             // Convert int code to string to be sent over UDP
             String stringCode = Integer.toString(code);
@@ -37,10 +37,5 @@ public class UDPClient {
 
             // Close the socket    
             socket.close();
+            }
         }
-
-        private static int getEquipmentID(){
-            int ECode = 0;
-            return ECode;
-        }
-}
