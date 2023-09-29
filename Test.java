@@ -1,37 +1,75 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.TimerTask;
+import java.util.Timer;
 
 public class Test{
 
     public static int FrameWidth = 1280, FrameHeight = 720;
 
     JFrame frame = new JFrame("CardLayout Test");
+    JPanel panelContainer = new JPanel();
+    JPanel panelStartup;      
+    JPanel panelPlayAction = new JPanel();
 
+    //Declare and initialize all Swing Objects for PlayerEntry Panel
+    JPanel panelPlayerEntry = new JPanel();
+    JButton button1 = new JButton("1 Swap");
+    JButton button2 = new JButton("2 Swap");
+    CardLayout cl = new CardLayout();
+    JTextField[] greenID, greenName, redID, redName;
+    JTextField playerEntryTitle = new JTextField("EDIT CURRENT GAME");
+    JTextField greenTeamHeading = new JTextField("Green Team");
+    JTextField redTeamHeading = new JTextField("Red Team");
+    JTextField greenIDHeading = new JTextField("Player ID:");
+    JTextField greenNameHeading = new JTextField("Code Name:");
+    JTextField redIDHeading = new JTextField("Player ID:");
+    JTextField redNameHeading = new JTextField("Code Name:");
+    Font titleFont = new Font("Serif",Font.BOLD,30);
+    Color playerEntryBackgroundColor = new Color(200,205,210);
+    
+
+    private static BufferedImage image;
+	//scale startup image method
+    private static BufferedImage scale(BufferedImage src, int w, int h) {
+        BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = img.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(src, 0, 0, w, h, null);
+        g.dispose();
+        return img;
+    }
 
     public Test() {    
         
-        JPanel panelContainer = new JPanel();
-        JPanel panelStartup = new JPanel();        
-        JPanel panelPlayAction = new JPanel();
+
+        try {
+            image = ImageIO.read(new File("logo.jpg"));
+            BufferedImage scaledImage = scale(image, 1200, 700);
+
+            panelStartup = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    g.drawImage(scaledImage, 0, 0, getWidth(), getHeight(), null);
+                }
+            };
+
+            
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            System.exit(1);
+        }
 
         
-        //Set up all Swing Objects for PlayerEntry Panel
-        JPanel panelPlayerEntry = new JPanel();
-        JButton button1 = new JButton("1 Swap");
-        JButton button2 = new JButton("2 Swap");
-        CardLayout cl = new CardLayout();
-        JTextField[] greenID, greenName, redID, redName;
-        JTextField playerEntryTitle = new JTextField("EDIT CURRENT GAME");
-        JTextField greenTeamHeading = new JTextField("Green Team");
-        JTextField redTeamHeading = new JTextField("Red Team");
-        JTextField greenIDHeading = new JTextField("Player ID:");
-        JTextField greenNameHeading = new JTextField("Code Name:");
-        JTextField redIDHeading = new JTextField("Player ID:");
-        JTextField redNameHeading = new JTextField("Code Name:");
-        Font titleFont = new Font("Serif",Font.BOLD,30);
-        Color playerEntryBackgroundColor = new Color(200,205,210);
         
         //Setup the panels for PlayerEntry screen
         panelContainer.setLayout(cl);
@@ -51,7 +89,7 @@ public class Test{
         panelContainer.add(panelPlayAction,"2");
 
         //Choose which panel to display on opening
-        cl.show(panelContainer,"1");
+        cl.show(panelContainer,"0");
 
         //Action listeners for the buttons !!!CAN ALSO BE REMOVED!!!
         button1.addActionListener(e -> cl.show(panelContainer,"2"));
@@ -62,6 +100,11 @@ public class Test{
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(FrameWidth, FrameHeight);
         frame.setVisible(true);
+
+
+
+        
+
 
         //Set up the Player Entry Title
         playerEntryTitle.setBounds(0,10,FrameWidth,60);
@@ -201,6 +244,16 @@ public class Test{
         
         Test test = new Test();  
 
+        TimerTask task = new TimerTask() {
+            public void run() {
+                test.cl.show(test.panelContainer,"1");
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(task, 3000);
+
+
+
         //All GUI updates should happen under run
         SwingUtilities.invokeLater(new Runnable(){
             public void run(){
@@ -212,6 +265,8 @@ public class Test{
             }
         });
     }
+
+    
 
     
 }

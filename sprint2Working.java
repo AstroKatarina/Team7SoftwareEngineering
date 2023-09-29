@@ -121,7 +121,6 @@ public class sprint2Working
 
 		//timer that switches start up image card to player entry table card
         Timer timer = new Timer(3000, new ActionListener() {
-            
 
             @Override
             public void actionPerformed(ActionEvent e) 
