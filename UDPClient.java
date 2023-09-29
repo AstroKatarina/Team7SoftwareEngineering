@@ -1,43 +1,39 @@
+// Java program to illustrate Server side
+// Implementation using DatagramSocket
 import java.net.*;
 import java.io.*;
-import java.util.Scanner;
 
-public class UDPClient {
-        public static void main(String[] args) throws IOException{
-            Scanner sc = new Scanner(System.in);
-           
-            DatagramSocket socket = new DatagramSocket();
 
-            // Define the server address and port (e.g., localhost and 12345)
-            InetAddress serverAddress = InetAddress.getLocalHost();
-            int serverPort = 7500;
-            byte buf[] = null;
+public class UDPServer {
+    public static void main(String[] args) {
+        DatagramSocket socket = null;
 
-            //Temporary int
-            int code = 0;
+        try {
+            // Create a UDP socket to listen on a specific port (e.g., 12345)
+            socket = new DatagramSocket(7500);
 
-            while(true) {
-                System.out.print("Player Code: ");
-                System.out.print(code);
-                String input = sc.nextLine();
+            byte[] receiveData = new byte[1024];
 
-                // convert the String input into the byte array.
-                buf = input.getBytes();
+            while (true) {
+                DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 
-                // Create a UDP packet with the message and send it to the server
-                DatagramPacket sendPacket = new DatagramPacket(buf, buf.length, serverAddress, serverPort);
-                socket.send(sendPacket);
+                // Wait for a UDP packet to arrive
+                socket.receive(receivePacket);
 
-                System.out.println("Sent message to server: " + input);
+                String message = new String(receivePacket.getData(), 0, receivePacket.getLength());
+                System.out.println("Received message from client: " + message);
 
-                if(input.equals("bye")){
-                break;
-                }
+                // You can process the received message here
+
+                // Clear the receive buffer for the next message
+                receiveData = new byte[1024];
             }
-
-            socket.close();
-            sc.close();
-
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
         }
+    }
 }
-
