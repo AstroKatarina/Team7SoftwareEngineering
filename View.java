@@ -2,6 +2,7 @@
 //View File for Laser Tag Project
 
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -9,18 +10,26 @@ import java.io.File;
 import java.awt.Color;
 
 //adds button and image to program
-class View extends JPanel
-{
+class View
+{	
+	JPanel panel;
 	BufferedImage loadUpImage;
 	Model model;
+	JTextField field1;
+	//field1.setBounds(20,20,20,20);
+
 	//add start up picture here?
 	View(Controller c, Model m)
     {
         model = m;
+		panel = new JPanel();
+		field1 = new JTextField(20);
+		panel.add(field1);
         c.setView(this);
         try
         {
-            this.loadUpImage = ImageIO.read(new File("logo.jpg"));
+            loadUpImage = ImageIO.read(new File("logo.jpg"));
+
         }
         catch(Exception e)
         {
@@ -49,10 +58,10 @@ class View extends JPanel
 	}
 	public void paintComponent(Graphics g)
    	{
-        	g.setColor(new Color(128, 255, 255));
-		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+		g.setColor(new Color(128, 255, 255));
+		g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
 		//scale(loadUpImage, 3487, 2221);
-		g.drawImage(this.scale(loadUpImage, 1200, 700), 0, 0, null);
+		g.drawImage(scale(loadUpImage, 1200, 700), 0, 0, null);
 	}
 	
 	int startUpTimer = 0;

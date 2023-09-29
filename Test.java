@@ -1,0 +1,203 @@
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+
+import java.awt.*;
+
+public class Test{
+
+    public static int FrameWidth = 1280, FrameHeight = 720;
+
+    JFrame frame = new JFrame("CardLayout Test");
+    JPanel panelContainer = new JPanel();
+    JPanel panelPlayerEntry = new JPanel();
+    JPanel panelSecond = new JPanel();
+    JTextField field1 = new JTextField("First Panel TextField");
+    JTextField field2 = new JTextField("Second Panel TextField");
+    JButton button1 = new JButton("1 Swap");
+    JButton button2 = new JButton("2 Swap");
+    CardLayout cl = new CardLayout();
+    
+    JTextField[] greenID, greenName, redID, redName;
+
+    JTextField playerEntryTitle = new JTextField("EDIT CURRENT GAME");
+
+    JTextField greenTeamHeading = new JTextField("Green Team");
+    JTextField redTeamHeading = new JTextField("Red Team");
+
+    public Test() {
+        panelContainer.setLayout(cl);
+        panelPlayerEntry.setLayout(null);
+        panelSecond.setLayout(null);
+
+        Color playerEntryBackgroundColor = new Color(200,205,210);
+        panelPlayerEntry.setBackground(playerEntryBackgroundColor);
+
+        button1.setBounds(FrameWidth/2-50,FrameHeight-60,100,30);
+        button2.setBounds(FrameWidth/2-50,FrameHeight-60,100,30);
+        panelPlayerEntry.add(button1);
+        panelSecond.add(button2);
+
+        panelContainer.add(panelPlayerEntry,"1");
+        panelContainer.add(panelSecond,"2");
+        cl.show(panelContainer,"1");
+
+        button1.addActionListener(e -> cl.show(panelContainer,"2"));
+        button2.addActionListener(e -> cl.show(panelContainer,"1"));
+
+        frame.add(panelContainer);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(FrameWidth, FrameHeight);
+        frame.setVisible(true);
+
+        //Set up the Player Entry Title
+        Font titleFont = new Font("Serif",Font.BOLD,30);
+        playerEntryTitle.setBounds(0,10,FrameWidth,60);
+        playerEntryTitle.setEditable(false);
+        playerEntryTitle.setHorizontalAlignment(JTextField.CENTER);
+        playerEntryTitle.setBackground(null);
+        playerEntryTitle.setBorder(new LineBorder(Color.WHITE,0));
+        playerEntryTitle.setFont(titleFont);
+        playerEntryTitle.setForeground(new Color(10,20,75));
+        panelPlayerEntry.add(playerEntryTitle);
+
+        greenID = new JTextField[15];
+        greenName = new JTextField[15];
+        redID = new JTextField[15];
+        redName = new JTextField[15];
+
+
+        int width = 150, height = 25, verticalSpacing = 3, horizontalSpacing = 2, startX = FrameWidth/2-(2*width)-horizontalSpacing, startY = 150, x = startX, y = startY;
+
+        greenTeamHeading.setBounds(x+width/2+horizontalSpacing/2,y-(height+40)-verticalSpacing,width,height+10);
+        greenTeamHeading.setEditable(false);
+        greenTeamHeading.setHorizontalAlignment(JTextField.CENTER);
+        greenTeamHeading.setBackground(new Color(0,200,0));
+        greenTeamHeading.setBorder(new LineBorder(Color.WHITE,2));
+        panelPlayerEntry.add(greenTeamHeading);
+
+
+        //Set up Green team ID column
+        JTextField greenIDHeading = new JTextField("Player ID:");
+        greenIDHeading.setBounds(x,y-height-verticalSpacing,width,height);
+        greenIDHeading.setEditable(false);
+        greenIDHeading.setHorizontalAlignment(JTextField.CENTER);
+        greenIDHeading.setBackground(null);
+        greenIDHeading.setBorder(new LineBorder(Color.WHITE,0));
+        greenIDHeading.setForeground(new Color(10,20,75));
+        panelPlayerEntry.add(greenIDHeading);
+        for(int i = 0; i<15; i++)
+        {
+            greenID[i] = new JTextField();
+            greenID[i].setBounds(x,y,width,height);
+            greenID[i].setBorder(new LineBorder(Color.BLACK,1));
+            greenID[i].setHorizontalAlignment(JTextField.CENTER);
+            greenID[i].setBackground(Color.WHITE);
+            greenID[i].setForeground(Color.BLACK);
+            panelPlayerEntry.add(greenID[i]);
+
+            y+= height + verticalSpacing;
+        }
+
+        x += width + horizontalSpacing;
+        y = startY;
+
+        //Set up Green team Name column
+        JTextField greenNameHeading = new JTextField("Code Name:");
+        greenNameHeading.setBounds(x,y-height-verticalSpacing,width,height);
+        greenNameHeading.setEditable(false);
+        greenNameHeading.setHorizontalAlignment(JTextField.CENTER);
+        greenNameHeading.setBackground(null);
+        greenNameHeading.setBorder(new LineBorder(Color.WHITE,0));
+        greenNameHeading.setForeground(new Color(10,20,75));
+        panelPlayerEntry.add(greenNameHeading);
+        for(int i = 0; i<15; i++)
+        {
+            greenName[i] = new JTextField();
+            greenName[i].setBounds(x,y,width,height);
+            greenName[i].setBorder(new LineBorder(Color.BLACK,1));
+            greenName[i].setEditable(false);
+            greenName[i].setBackground(Color.WHITE);
+            greenName[i].setForeground(Color.BLACK);
+            panelPlayerEntry.add(greenName[i]);
+
+            y+= height + verticalSpacing;
+        }
+
+
+        x += width + horizontalSpacing*4;
+        y = startY;
+        
+        redTeamHeading.setBounds(x+width/2+horizontalSpacing/2,y-(height+40)-verticalSpacing,width,height+10);
+        redTeamHeading.setEditable(false);
+        redTeamHeading.setHorizontalAlignment(JTextField.CENTER);
+        redTeamHeading.setBackground(new Color(200,0,0));
+        redTeamHeading.setBorder(new LineBorder(Color.WHITE,2));
+        panelPlayerEntry.add(redTeamHeading);
+        
+        //Set up Red team ID column
+        JTextField redIDHeading = new JTextField("Player ID:");
+        redIDHeading.setBounds(x,y-height-verticalSpacing,width,height);
+        redIDHeading.setEditable(false);
+        redIDHeading.setHorizontalAlignment(JTextField.CENTER);
+        redIDHeading.setBackground(null);
+        redIDHeading.setBorder(new LineBorder(Color.WHITE,0));
+        redIDHeading.setForeground(new Color(10,20,75));
+        panelPlayerEntry.add(redIDHeading);
+        for(int i = 0; i<15; i++)
+        {
+            redID[i] = new JTextField();
+            redID[i].setBounds(x,y,width,height);
+            redID[i].setBorder(new LineBorder(Color.BLACK,1));
+            redID[i].setBackground(Color.WHITE);
+            redID[i].setForeground(Color.BLACK);
+            redID[i].setHorizontalAlignment(JTextField.CENTER);
+            panelPlayerEntry.add(redID[i]);
+
+            y+= height + verticalSpacing;
+        }
+
+        x += width + horizontalSpacing;
+        y = startY;
+
+        //Set up Red team Name column
+        JTextField redNameHeading = new JTextField("Code Name:");
+        redNameHeading.setBounds(x,y-height-verticalSpacing,width,height);
+        redNameHeading.setEditable(false);
+        redNameHeading.setHorizontalAlignment(JTextField.CENTER);
+        redNameHeading.setBackground(null);
+        redNameHeading.setBorder(new LineBorder(Color.WHITE,0));
+        redNameHeading.setForeground(new Color(10,20,75));
+        panelPlayerEntry.add(redNameHeading);
+        for(int i = 0; i<15; i++)
+        {
+            redName[i] = new JTextField();
+            redName[i].setBounds(x,y,width,height);
+            redName[i].setBorder(new LineBorder(Color.BLACK,1));
+            redName[i].setEditable(false);
+            redName[i].setBackground(Color.WHITE);
+            redName[i].setForeground(Color.BLACK);
+            panelPlayerEntry.add(redName[i]);
+
+            y+= height + verticalSpacing;
+        }
+    }
+
+
+
+    public static void main(String[] args){
+        
+        Test test = new Test();  
+
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+
+               /*Rectangle r = test.frame.getBounds();
+                Test.FrameWidth = r.width;
+                Test.FrameHeight = r.height;*/
+                test.frame.repaint();
+            }
+        });
+    }
+
+    
+}
