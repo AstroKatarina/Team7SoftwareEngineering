@@ -1,0 +1,21 @@
+{
+    "configurations": [
+    {
+      "type": "java",
+      "name": "Debug with args",
+      "args": "--args_for_app",
+      "classPaths": ["$HOME/lib/postgresql-42.6.0.jar"],
+      "env": {
+        "env1": "env1value"
+      },
+      "request": "launch",
+      "mainClass": "my.main.Game",
+      "projectName": "projectName",
+      "console": "internalConsole"
+    }
+    
+],
+"java.project.referencedLibraries": [
+    "lib/**/*.jar"
+]
+}

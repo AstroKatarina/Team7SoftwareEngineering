@@ -16,6 +16,10 @@ class Controller implements ActionListener, MouseListener, KeyListener
 	Controller(Model m) 
 	{
         this.model = m;
+        DBController DB = new DBController();
+        DB.update();
+
+
     }
 
     void setView(View v) 
