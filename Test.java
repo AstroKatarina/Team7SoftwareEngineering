@@ -10,15 +10,15 @@ public class Test{
     JFrame frame = new JFrame("CardLayout Test");
 
 
-    public Test() {
+    public Test() {    
+        
+        JPanel panelContainer = new JPanel();
+        JPanel panelStartup = new JPanel();        
+        JPanel panelPlayAction = new JPanel();
+
         
         //Set up all Swing Objects for PlayerEntry Panel
-        JPanel panelContainer = new JPanel();
-        JPanel panelStartup = new JPanel();
         JPanel panelPlayerEntry = new JPanel();
-        JPanel panelPlayAction = new JPanel();
-        JTextField field1 = new JTextField("First Panel TextField");
-        JTextField field2 = new JTextField("Second Panel TextField");
         JButton button1 = new JButton("1 Swap");
         JButton button2 = new JButton("2 Swap");
         CardLayout cl = new CardLayout();
