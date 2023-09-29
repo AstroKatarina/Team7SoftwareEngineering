@@ -13,15 +13,15 @@ public class Game extends JFrame
     public Game() 
 	{
 		this.controller = new Controller(this.model);
-        this.view = new View(this.controller, this.model);
+        view = new View(this.controller, this.model);
         this.setTitle("Sprint 2");
         this.setSize(1200, 700);
         this.setFocusable(true);
-        this.getContentPane().add(this.view);
+        this.getContentPane().add(view.panel);
         this.setDefaultCloseOperation(3);
         this.setVisible(true);
         this.addKeyListener(this.controller);
-        this.view.addMouseListener(this.controller);
+        view.panel.addMouseListener(this.controller);
 	}
 
 	public void run() 
@@ -29,7 +29,7 @@ public class Game extends JFrame
         while(true) {
             this.controller.update();
             this.model.update();
-            this.view.repaint();
+            view.panel.repaint();
             Toolkit.getDefaultToolkit().sync();
 
             try {
