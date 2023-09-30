@@ -13,9 +13,9 @@ class Controller implements ActionListener, MouseListener, KeyListener
     View view;
     Model model;
 
-	Controller(Model m) 
+	Controller() 
 	{
-        this.model = m;
+        //this.model = m;
     }
 
     void setView(View v) 
@@ -77,5 +77,15 @@ class Controller implements ActionListener, MouseListener, KeyListener
 
     void update() 
 	{
+    }
+
+    public String queryHandoff(int playerID)
+    {
+        if(playerID==0)
+        {
+            return null;
+        } else {
+            return "CodeName";
+        }
     }
 }
