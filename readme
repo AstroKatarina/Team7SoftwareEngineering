@@ -12,7 +12,7 @@
 |   Chris Stites   |  ChrisStites             |
 -----------------------------------------------
 
-Run this program by navigating to the folder it is stored in via terminal and running "javac Photon.java" then "java Photon"
+Run this program by navigating to the folder it is stored in via terminal and running "java -jar Photon.jar" 
 
 To insert players or check for existing players, first enter player ID by doing ___________
 
