@@ -4,7 +4,7 @@ class Player
     String CodeName = " ";
     int Score = 0;
     int Team = 0;
-    //green==1,red==2
+    //green==0,red==1
     int EquipmentID = 0;
 
 Player(int id)
