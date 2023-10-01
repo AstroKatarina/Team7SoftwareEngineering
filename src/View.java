@@ -19,9 +19,10 @@ public class View{
 
     Controller controller;
 
-    JFrame frame = new JFrame("CardLayout Test");
+    JFrame frame = new JFrame("Photon");
     JPanel panelContainer = new JPanel();
     JPanel panelPlayAction = new JPanel();
+    CardLayout cl = new CardLayout();
     
     //Declare objects for StartUp panel
     JPanel panelStartup;   
@@ -39,7 +40,6 @@ public class View{
 
     //Declare and initialize all Swing Objects for PlayerEntry Panel
     JPanel panelPlayerEntry = new JPanel();
-    CardLayout cl = new CardLayout();
     JTextField[] playerIDFields, playerNameFields;
     JTextField playerEntryTitle = new JTextField("EDIT CURRENT GAME");
     JTextField greenTeamHeading = new JTextField("Green Team");
@@ -48,6 +48,8 @@ public class View{
     JTextField greenNameHeading = new JTextField("Code Name:");
     JTextField redIDHeading = new JTextField("Player ID:");
     JTextField redNameHeading = new JTextField("Code Name:");
+    JTextArea f5IntructionHeading = new JTextArea("Press F5 to Start Game");
+    JTextArea f12IntructionHeading = new JTextArea("Press F12 to Clear Entries");
     Font titleFont = new Font("Serif",Font.BOLD,30);
     Color playerEntryBackgroundColor = new Color(200,205,210);
     //Delcare and initialize objects for the EID Prompt Popup
@@ -260,10 +262,30 @@ public class View{
         redTeamHeading.setEditable(false);
         redTeamHeading.setHorizontalAlignment(JTextField.CENTER);
         redTeamHeading.setBackground(new Color(200,0,0));
-        redTeamHeading.setBorder(new LineBorder(Color.WHITE,2));
+        redTeamHeading.setBorder(new LineBorder(Color.BLACK,2));
         panelPlayerEntry.add(redTeamHeading);
 
+
+        //Setup JTextField for Program Instructions on Bottom of The Screen
+        f5IntructionHeading.setBounds(x+width/2+horizontalSpacing/2,frameHeight - 80,75, 75);
+        f5IntructionHeading.setEditable(false);
+        f5IntructionHeading.setLineWrap(true);
+        f5IntructionHeading.setWrapStyleWord(true);
+        f5IntructionHeading.setBackground(new Color(100,105,110));
+        f5IntructionHeading.setForeground(Color.WHITE);
+        f5IntructionHeading.setBorder(new LineBorder(Color.BLACK,2));
+        panelPlayerEntry.add(f5IntructionHeading);
+
+        f12IntructionHeading.setBounds(100 + (frameWidth/2+width/2+horizontalSpacing/2),frameHeight - 80,75,75);
+        f12IntructionHeading.setEditable(false);
+        f12IntructionHeading.setLineWrap(true);
+        f12IntructionHeading.setWrapStyleWord(true);
+        f12IntructionHeading.setBackground(new Color(100,105,110));
+        f12IntructionHeading.setForeground(Color.WHITE);
+        f12IntructionHeading.setBorder(new LineBorder(Color.BLACK,2));
+        panelPlayerEntry.add(f12IntructionHeading);
         
+
         //Set up Green team ID column
         greenIDHeading.setBounds(frameWidth/2-2*width-horizontalSpacing*3,startY-height-verticalSpacing,width,height);
         greenIDHeading.setEditable(false);
@@ -339,6 +361,8 @@ public class View{
             x += width + horizontalSpacing*4;
             y = startY;       
         }
+
+        c.setView(this);
     }
 
     public int searchFieldsArray(JTextField[] array, JTextField source)
