@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.TimerTask;
 import java.util.Timer;
 
@@ -124,7 +125,9 @@ public class Test{
                         
                         try{
                             
-                            System.out.println("Equipment ID: " + Integer.parseInt(field.getText()));
+                            int eid = Integer.parseInt(field.getText());
+                            System.out.println("Equipment ID: " + eid);
+                            UDPClient.sendData(eid);
                             
                             field.setBorder(new LineBorder(Color.BLACK,1));
                             field.setText(null);
@@ -140,6 +143,9 @@ public class Test{
                             System.out.println("Invalid Equipment ID. ID must be an integer.");
                             field.setText(null);
                             field.setBorder(new LineBorder(Color.RED,1));
+                        }
+                        catch(IOException e2) {
+                            System.out.println("IOException => " + e2.getMessage());
                         }
                         
 
@@ -217,7 +223,7 @@ public class Test{
                     Object obj = e.getSource();
                     if (obj instanceof JTextField) {
                         JTextField field = (JTextField)obj;
-                        System.out.println("Name=" + field.getText());
+                        System.out.println("Name = " + field.getText());
                         field.setEditable(false);
                         field.setBorder(new LineBorder(Color.BLACK,1));
 
@@ -353,6 +359,7 @@ public class Test{
         TimerTask task = new TimerTask() {
             public void run() {
                 test.cl.show(test.panelContainer,"1");
+                test.playerIDFields[0].requestFocus();
             }
         };
         Timer timer = new Timer();
