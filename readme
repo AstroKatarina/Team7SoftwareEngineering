@@ -1,16 +1,16 @@
-------------------------------------
-|       Name       |  GitHub Name  |
-------------------------------------
-| Katarina Humbert | AstroKatarina |
-------------------------------------
-|    Evan Bonar    |   EvanMBonar  |
-------------------------------------
-|   David Nystrom  |  DavidNystrom |
-------------------------------------
-|    Ethan Moss    |  Ethan-Moss-3 |
-------------------------------------
-|   Chris Stites   |  ChrisStites  |
-------------------------------------
+-----------------------------------------------
+|       Name       |  GitHub Name             |
+-----------------------------------------------
+| Katarina Humbert | AstroKatarina            |
+-----------------------------------------------
+|    Evan Bonar    |   EvanMBonar             |
+-----------------------------------------------
+|   David Nystrom  |  DavidNystrom            |
+-----------------------------------------------
+|    Ethan Moss    |  Ethan-Moss-3 & MossETree|
+-----------------------------------------------
+|   Chris Stites   |  ChrisStites             |
+-----------------------------------------------
 
 Run this program by navigating to the folder it is stored in via terminal and running "javac Test.java" then "java Test"
 
