@@ -1,11 +1,8 @@
 //Software Engineering Team #7
 //Game File for Laser Tag Project
 
-import java.awt.Toolkit;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 public class Photon 
@@ -13,10 +10,12 @@ public class Photon
     Model model = new Model();
     Controller controller;
     View view;
+    DBController dbController = new DBController();
 
     public Photon() 
 	{
-		this.controller = new Controller(this.model);
+
+		this.controller = new Controller(this.model, this.dbController);
         view = new View(this.controller);
         
 	}

@@ -1,6 +1,5 @@
 import java.net.*;
 import java.io.*;
-import java.util.Scanner;
 
 public class UDPClient {
         public static void sendData(int Ecode) throws IOException{
