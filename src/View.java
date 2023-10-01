@@ -8,15 +8,14 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.TimerTask;
-import java.util.Timer;
+
 
 public class View{
 
     public static int frameWidth = 1280, frameHeight = 720;
     public static int popUpFrameWidth = 400, popUpFrameHeight = 200;
     
-    private int nextIDField;
+    private int nextIDField, currentID;
 
     Controller controller;
 
@@ -192,11 +191,13 @@ public class View{
                         nextIDField = parallelIndex+1;
                         
                         try{
-                            String codeName = controller.queryHandoff(Integer.parseInt(field.getText()));
+                            int id = Integer.parseInt(field.getText());
+                            String codeName = controller.queryHandoff(id);
                             System.out.println("ID: " + field.getText() + " at index " + parallelIndex);
                             field.setBorder(new LineBorder(Color.BLACK,1));
                         if(codeName == null)
                         {
+                            currentID = id;
                             playerNameFields[parallelIndex].requestFocus();
                             playerNameFields[parallelIndex].setBorder(new LineBorder(Color.GREEN,1));
                             playerNameFields[parallelIndex].setEditable(true);
@@ -226,8 +227,7 @@ public class View{
                     if (obj instanceof JTextField) {
                         JTextField field = (JTextField)obj;
                         System.out.println("Name = " + field.getText());
-
-
+                        controller.insertCodename(currentID,field.getText());
 
                         field.setEditable(false);
                         field.setBorder(new LineBorder(Color.BLACK,1));
