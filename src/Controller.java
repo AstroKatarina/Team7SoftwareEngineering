@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import javax.swing.*;
 
 class Controller implements ActionListener, MouseListener, KeyListener 
 {
@@ -18,11 +19,21 @@ class Controller implements ActionListener, MouseListener, KeyListener
 	{
         this.model = m;
         this.dbController = db;
+        
     }
 
     void setView(View v) 
 	{
         this.view = v;
+        view.panelPlayerEntry.addKeyListener(this);
+        for(JTextField field : view.playerIDFields)
+        {
+            field.addKeyListener(this);
+        }
+        for(JTextField field : view.playerNameFields)
+        {
+            field.addKeyListener(this);
+        }
     }
 
 	public void actionPerformed(ActionEvent e) 
@@ -63,13 +74,18 @@ class Controller implements ActionListener, MouseListener, KeyListener
 
 	public void keyReleased(KeyEvent e) 
 	{
-        switch (e.getKeyCode()) 
-		{
-            case 27:
-                System.exit(0);
-            case 81:
-                System.exit(0);
-        }
+           int key = e.getKeyCode();
+           switch(key)
+           {
+                case KeyEvent.VK_F12:
+                    clearEntries();
+                    break;
+                case KeyEvent.VK_F5:
+                    startGame();
+                    break;
+           }
+        
+                
 
     }
 
@@ -92,4 +108,21 @@ class Controller implements ActionListener, MouseListener, KeyListener
         dbController.insertNewRow(id, codename);
     }
 
+    private void startGame()
+    {
+        view.cl.show(view.panelContainer,"2");
+    }
+
+    private void clearEntries()
+    {
+        for(JTextField field : view.playerIDFields)
+        {
+            field.setText(null);
+        }
+        for(JTextField field : view.playerNameFields)
+        {
+            field.setText(null);
+        }
+    }
+    
 }
