@@ -12,7 +12,10 @@ import java.util.Timer;
 
 public class Test{
 
-    public static int FrameWidth = 1280, FrameHeight = 720;
+    public static int frameWidth = 1280, frameHeight = 720;
+    public static int popUpFrameWidth = 400, popUpFrameHeight = 200;
+    
+    private int nextIDField;
 
     Controller c = new Controller();
 
@@ -36,8 +39,6 @@ public class Test{
 
     //Declare and initialize all Swing Objects for PlayerEntry Panel
     JPanel panelPlayerEntry = new JPanel();
-    JButton button1 = new JButton("1 Swap");
-    JButton button2 = new JButton("2 Swap");
     CardLayout cl = new CardLayout();
     JTextField[] playerIDFields, playerNameFields;
     JTextField playerEntryTitle = new JTextField("EDIT CURRENT GAME");
@@ -53,7 +54,7 @@ public class Test{
     JFrame popUpFrame = new JFrame("Enter Equipment ID");
     JPanel panelPromptPopUp = new JPanel();
     JTextField enterEID = new JTextField();
-    JTextField entryPrompt = new JTextField("Enter this player's equipment ID and press return.");
+    JTextField entryPrompt = new JTextField();
     
 
     
@@ -82,17 +83,13 @@ public class Test{
 
         
         
-        //Setup the panels for PlayerEntry screen
+        //Setup the panels
         panelContainer.setLayout(cl);
         panelPlayerEntry.setLayout(null);
         panelPlayAction.setLayout(null);
+        panelPromptPopUp.setLayout(null);
+        panelPromptPopUp.setBackground(playerEntryBackgroundColor);
         panelPlayerEntry.setBackground(playerEntryBackgroundColor);
-
-        //Add buttons to panels !!!TEMPORARY TESTING, SHOULD BE REMOVED!!!
-        button1.setBounds(FrameWidth/2-50,FrameHeight-60,100,30);
-        button2.setBounds(FrameWidth/2-50,FrameHeight-60,100,30);
-        panelPlayerEntry.add(button1);
-        panelPlayAction.add(button2);
 
         //Add panels to the container panel set up with CardLayout
         panelContainer.add(panelStartup,"0");
@@ -102,28 +99,73 @@ public class Test{
         //Choose which panel to display on opening
         cl.show(panelContainer,"0");
 
-        //Action listeners for the buttons !!!CAN ALSO BE REMOVED!!!
-        button1.addActionListener(e -> cl.show(panelContainer,"2"));
-        button2.addActionListener(e -> cl.show(panelContainer,"1"));
-
-        //Setup the frame and add the container panel to it
+        //Setup the main frame and add the container panel to it
         frame.add(panelContainer);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(FrameWidth, FrameHeight);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(frameWidth, frameHeight);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
         //Setup the popup frame and add the panel to it
         popUpFrame.add(panelPromptPopUp);
         popUpFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        popUpFrame.setSize(400, 200);
+        popUpFrame.setSize(popUpFrameWidth, popUpFrameHeight);
+        popUpFrame.setLocationRelativeTo(frame);
         popUpFrame.setVisible(false);
 
 
-        
+
+        //Define Action Listener for PopUp Entry Field
+        ActionListener listenerEIDEntry = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Object obj = e.getSource();
+                    if (obj instanceof JTextField) {
+                        JTextField field = (JTextField)obj;
+                        
+                        try{
+                            
+                            System.out.println("Equipment ID: " + Integer.parseInt(field.getText()));
+                            
+                            field.setBorder(new LineBorder(Color.BLACK,1));
+                            field.setText(null);
+                            popUpFrame.setVisible(false);
+
+                            if(nextIDField<playerIDFields.length){
+                                playerIDFields[nextIDField].requestFocus();
+                            } else {
+                                playerIDFields[0].requestFocus();
+                        }
+                        }
+                        catch(NumberFormatException e1) {
+                            System.out.println("Invalid Equipment ID. ID must be an integer.");
+                            field.setText(null);
+                            field.setBorder(new LineBorder(Color.RED,1));
+                        }
+                        
+
+                        
+                    }
+                }
+        };
+
+        //Setup the popup panel
+        int entryWidth = 50, entryHeight=25;
+        enterEID.setBounds(popUpFrameWidth/2-entryWidth/2,popUpFrameHeight/2+entryHeight/2,entryWidth,entryHeight);
+        enterEID.setHorizontalAlignment(JTextField.CENTER);
+        enterEID.setBorder(new LineBorder(Color.BLACK,1));
+        enterEID.addActionListener(listenerEIDEntry);
+        panelPromptPopUp.add(enterEID);
+    
+        entryPrompt.setBounds(0,popUpFrameHeight/2-(2*entryHeight)-10,popUpFrameWidth,entryHeight);
+        entryPrompt.setHorizontalAlignment(JTextField.CENTER);
+        entryPrompt.setBorder(new LineBorder(Color.WHITE,0));
+        entryPrompt.setEditable(false);
+        entryPrompt.setBackground(null);
+        panelPromptPopUp.add(entryPrompt);
 
 
         //Set up the Player Entry Title
-        playerEntryTitle.setBounds(0,10,FrameWidth,60);
+        playerEntryTitle.setBounds(0,10,frameWidth,60);
         playerEntryTitle.setEditable(false);
         playerEntryTitle.setHorizontalAlignment(JTextField.CENTER);
         playerEntryTitle.setBackground(null);
@@ -138,26 +180,30 @@ public class Test{
                     Object obj = e.getSource();
                     if (obj instanceof JTextField) {
                         JTextField field = (JTextField)obj;
-                        int parallelIndex = searchFieldsArray(playerIDFields, (JTextField)obj);
-                        System.out.println("ID: " + field.getText() + " at index " + parallelIndex);
+                        int parallelIndex = searchFieldsArray(playerIDFields, field);
+                        nextIDField = parallelIndex+1;
+                        
                         try{
-                            String codeName = c.queryHandoff(Integer.parseInt(((JTextField)obj).getText()));
+                            String codeName = c.queryHandoff(Integer.parseInt(field.getText()));
+                            System.out.println("ID: " + field.getText() + " at index " + parallelIndex);
+                            field.setBorder(new LineBorder(Color.BLACK,1));
                         if(codeName == null)
                         {
                             playerNameFields[parallelIndex].requestFocus();
-                            playerNameFields[parallelIndex].setBorder(new LineBorder(Color.RED,1));
+                            playerNameFields[parallelIndex].setBorder(new LineBorder(Color.GREEN,1));
                             playerNameFields[parallelIndex].setEditable(true);
                         } else {
                             playerNameFields[parallelIndex].setText(codeName);
-                            if(parallelIndex<playerIDFields.length){
-                                playerIDFields[parallelIndex+1].requestFocus();
-                            } else {
-                                playerIDFields[0].requestFocus();
-                            }
+                            entryPrompt.setText("Enter " + codeName + "'s equipment ID and press return.");
+                            popUpFrame.setVisible(true);
+                            popUpFrame.toFront();
+                            enterEID.requestFocus();
                             
                         }
                         } catch(NumberFormatException e1 ) {
-                            playerIDFields[parallelIndex].setText(null);
+                            System.out.println("Invalid ID input. Must be an integer.");
+                            field.setText(null);
+                            field.setBorder(new LineBorder(Color.RED,1));
                         }
                         
                         
@@ -165,22 +211,20 @@ public class Test{
                 }
         };
 
-        //Define Action Listener for ID Fields
+        //Define Action Listener for Name Fields
         ActionListener listenerName = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Object obj = e.getSource();
                     if (obj instanceof JTextField) {
-                        int parallelIndex = searchFieldsArray(playerNameFields, (JTextField)obj);
                         JTextField field = (JTextField)obj;
                         System.out.println("Name=" + field.getText());
-                        ((JTextField)obj).setEditable(false);
-                        ((JTextField)obj).setBorder(new LineBorder(Color.BLACK,1));
-                        if(parallelIndex<playerIDFields.length){
-                                playerIDFields[parallelIndex+1].requestFocus();
-                            } else {
-                                playerIDFields[0].requestFocus();
-                            }
+                        field.setEditable(false);
+                        field.setBorder(new LineBorder(Color.BLACK,1));
 
+                        entryPrompt.setText("Enter " + field.getText() + "'s equipment ID and press return.");
+                        popUpFrame.setVisible(true);
+                        popUpFrame.toFront();
+                        enterEID.requestFocus();
 
                     }
                 }
@@ -191,7 +235,7 @@ public class Test{
         playerNameFields = new JTextField[30];
 
         //Setup variables for position of JTextFields on PlayerEntry screen
-        int width = 150, height = 25, verticalSpacing = 3, horizontalSpacing = 2, startX = FrameWidth/2-(2*width)-horizontalSpacing, startY = 150, x = startX, y = startY;
+        int width = 150, height = 25, verticalSpacing = 3, horizontalSpacing = 2, startX = frameWidth/2-(2*width)-horizontalSpacing, startY = 150, x = startX, y = startY;
 
         //Setup JTextField for the heading above the teams columns
         greenTeamHeading.setBounds(x+width/2+horizontalSpacing/2,y-(height+40)-verticalSpacing,width,height+10);
@@ -201,16 +245,16 @@ public class Test{
         greenTeamHeading.setBorder(new LineBorder(Color.WHITE,2));
         panelPlayerEntry.add(greenTeamHeading);
         
-        redTeamHeading.setBounds(FrameWidth/2+width/2+horizontalSpacing/2,y-(height+40)-verticalSpacing,width,height+10);
+        redTeamHeading.setBounds(frameWidth/2+width/2+horizontalSpacing/2,y-(height+40)-verticalSpacing,width,height+10);
         redTeamHeading.setEditable(false);
         redTeamHeading.setHorizontalAlignment(JTextField.CENTER);
         redTeamHeading.setBackground(new Color(200,0,0));
         redTeamHeading.setBorder(new LineBorder(Color.WHITE,2));
         panelPlayerEntry.add(redTeamHeading);
 
-        /*
+        
         //Set up Green team ID column
-        greenIDHeading.setBounds(x,y-height-verticalSpacing,width,height);
+        greenIDHeading.setBounds(frameWidth/2-2*width-horizontalSpacing*3,startY-height-verticalSpacing,width,height);
         greenIDHeading.setEditable(false);
         greenIDHeading.setHorizontalAlignment(JTextField.CENTER);
         greenIDHeading.setBackground(null);
@@ -219,7 +263,7 @@ public class Test{
         panelPlayerEntry.add(greenIDHeading);
 
         //Set up Green team Name column heading
-        greenNameHeading.setBounds(x,y-height-verticalSpacing,width,height);
+        greenNameHeading.setBounds(frameWidth/2-width-horizontalSpacing*2,startY-height-verticalSpacing,width,height);
         greenNameHeading.setEditable(false);
         greenNameHeading.setHorizontalAlignment(JTextField.CENTER);
         greenNameHeading.setBackground(null);
@@ -228,7 +272,7 @@ public class Test{
         panelPlayerEntry.add(greenNameHeading);
 
         //Set up Red team Name column heading  
-        redNameHeading.setBounds(x,y-height-verticalSpacing,width,height);
+        redNameHeading.setBounds(frameWidth/2+width+2*horizontalSpacing*2,startY-height-verticalSpacing,width,height);
         redNameHeading.setEditable(false);
         redNameHeading.setHorizontalAlignment(JTextField.CENTER);
         redNameHeading.setBackground(null);
@@ -237,14 +281,14 @@ public class Test{
         panelPlayerEntry.add(redNameHeading);
 
         //Set up Red team ID column
-        redIDHeading.setBounds(x,y-height-verticalSpacing,width,height);
+        redIDHeading.setBounds(frameWidth/2+horizontalSpacing*2,startY-height-verticalSpacing,width,height);
         redIDHeading.setEditable(false);
         redIDHeading.setHorizontalAlignment(JTextField.CENTER);
         redIDHeading.setBackground(null);
         redIDHeading.setBorder(new LineBorder(Color.WHITE,0));
         redIDHeading.setForeground(new Color(10,20,75));
         panelPlayerEntry.add(redIDHeading);
-        */
+        
 
         for(int i = 0; i<2; i++){
 
@@ -321,9 +365,10 @@ public class Test{
             public void run(){
 
                /*Rectangle r = test.frame.getBounds();
-                Test.FrameWidth = r.width;
-                Test.FrameHeight = r.height;*/
+                Test.frameWidth = r.width;
+                Test.frameHeight = r.height;*/
                 test.frame.repaint();
+                test.popUpFrame.repaint();
             }
         });
     }
