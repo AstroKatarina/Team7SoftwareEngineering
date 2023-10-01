@@ -12,7 +12,7 @@ public class Game extends JFrame
 
     public Game() 
 	{
-		this.controller = new Controller(this.model);
+		this.controller = new Controller();
         view = new View(this.controller, this.model);
         this.setTitle("Sprint 2");
         this.setSize(1200, 700);
