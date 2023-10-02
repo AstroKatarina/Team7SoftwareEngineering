@@ -20,6 +20,6 @@ If you change alter code and want to compile use these two commands before runni
 
 To insert players, first enter player ID into the respective column and press enter. If prompted to enter the player name, type it into the red highlighted textField and press enter. 
 
-To clear all entries press F12 (!!NOT YET IMPLEMENTED!!)
+To clear all entries press F12.
 
-To go to the play action screen press F5. (!!NOT YET IMPLEMENTED!!)
+To go to the play action screen press F5.
