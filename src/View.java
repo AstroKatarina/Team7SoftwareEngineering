@@ -136,6 +136,8 @@ public class View{
                             field.setText(null);
                             popUpFrame.setVisible(false);
 
+                            controller.setEquipmentID(eid);
+
                             if(nextIDField<playerIDFields.length){
                                 playerIDFields[nextIDField].requestFocus();
                             } else {
@@ -197,6 +199,10 @@ public class View{
                             String codeName = controller.queryHandoff(id);
                             System.out.println("ID: " + field.getText() + " at index " + parallelIndex);
                             field.setBorder(new LineBorder(Color.BLACK,1));
+                            // Send ID to controller
+                            controller.addModelPlayer();
+                            controller.setID(id);
+                            controller.setTeam(parallelIndex);
                         if(codeName == null)
                         {
                             currentID = id;
@@ -209,7 +215,8 @@ public class View{
                             popUpFrame.setVisible(true);
                             popUpFrame.toFront();
                             enterEID.requestFocus();
-                            
+                            // Send Name to controller
+                            controller.setcodeName(codeName);
                         }
                         } catch(NumberFormatException e1 ) {
                             System.out.println("Invalid ID input. Must be an integer.");
@@ -238,7 +245,7 @@ public class View{
                         popUpFrame.setVisible(true);
                         popUpFrame.toFront();
                         enterEID.requestFocus();
-
+                        controller.setcodeName(field.getText());
                     }
                 }
         };
