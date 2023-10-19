@@ -1,0 +1,2 @@
+Main-Class: Photon
+Class-Path: lib/postgresql-42.6.0.jar

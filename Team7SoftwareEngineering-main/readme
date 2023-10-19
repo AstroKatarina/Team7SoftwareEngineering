@@ -1,0 +1,25 @@
+-----------------------------------------------
+|       Name       |  GitHub Name             |
+-----------------------------------------------
+| Katarina Humbert | AstroKatarina            |
+-----------------------------------------------
+|    Evan Bonar    |   EvanMBonar             |
+-----------------------------------------------
+|   David Nystrom  |  DavidNystrom            |
+-----------------------------------------------
+|    Ethan Moss    |  Ethan-Moss-3 & MossETree|
+-----------------------------------------------
+|   Chris Stites   |  ChrisStites             |
+-----------------------------------------------
+
+Run this program by navigating to the folder it is stored in via terminal and running "java -jar Photon.jar" 
+
+If you change alter code and want to compile use these two commands before running it as above:
+"javac -cp "./lib/postgresql-42.6.0.jar" -d classes ./src/*.java"
+"jar cfm Photon.jar manifest.txt -C classes ."
+
+To insert players, first enter player ID into the respective column and press enter. If prompted to enter the player name, type it into the red highlighted textField and press enter. 
+
+To clear all entries press F12.
+
+To go to the play action screen press F5.
