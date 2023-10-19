@@ -68,10 +68,6 @@ class Controller implements ActionListener, MouseListener, KeyListener
 		}
     }
 
-
-
-
-
 	public void keyReleased(KeyEvent e) 
 	{
            int key = e.getKeyCode();
@@ -83,10 +79,10 @@ class Controller implements ActionListener, MouseListener, KeyListener
                 case KeyEvent.VK_F5:
                     startGame();
                     break;
+                case KeyEvent.VK_F1:
+                    model.printOut();
+                    break;
            }
-        
-                
-
     }
 
     public void keyTyped(KeyEvent e) 
@@ -124,5 +120,36 @@ class Controller implements ActionListener, MouseListener, KeyListener
             field.setText(null);
         }
     }
-    
+
+    public void setID(int ID){
+        model.setPlayerID(ID);
+    }
+
+    public void setcodeName(String codeName){
+        model.setPlayerCodeName(codeName);
+    }
+
+     public void setTeam(int parallelIndex){
+        if((parallelIndex >=0 && parallelIndex <= 14))
+        {
+            model.setPlayerTeam(0);
+        }
+        else
+        {
+            model.setPlayerTeam(1);
+        }
+    }
+
+    public void setScore(int Score){
+        model.setPlayerScore(Score);
+    }
+
+     public void setEquipmentID(int EquipmentID){
+        model.setPlayerEquipmentID(EquipmentID);
+    }
+
+    public void addModelPlayer()
+    {
+        model.addPlayer();
+    }
 }
