@@ -16,12 +16,14 @@ public class View{
     public static int popUpFrameWidth = 400, popUpFrameHeight = 200;
     
     private int nextIDField, currentID;
+    static int initialCountdownValue = 0;
 
     Controller controller;
 
     JFrame frame = new JFrame("Photon");
     JPanel panelContainer = new JPanel();
     JPanel panelPlayAction = new JPanel();
+    JPanel panelCountDown = new JPanel();
     CardLayout cl = new CardLayout();
     
     //Declare objects for StartUp panel
@@ -92,13 +94,16 @@ public class View{
         panelPlayerEntry.setLayout(null);
         panelPlayAction.setLayout(null);
         panelPromptPopUp.setLayout(null);
+        panelCountDown.setLayout(null);
         panelPromptPopUp.setBackground(playerEntryBackgroundColor);
         panelPlayerEntry.setBackground(playerEntryBackgroundColor);
+        panelCountDown.setBackground(playerEntryBackgroundColor);
 
         //Add panels to the container panel set up with CardLayout
         panelContainer.add(panelStartup,"0");
         panelContainer.add(panelPlayerEntry,"1");
         panelContainer.add(panelPlayAction,"2");
+        panelContainer.add(panelCountDown, "3");
 
         //Choose which panel to display on opening
         cl.show(panelContainer,"0");
@@ -135,8 +140,6 @@ public class View{
                             field.setBorder(new LineBorder(Color.BLACK,1));
                             field.setText(null);
                             popUpFrame.setVisible(false);
-
-                            controller.setEquipmentID(eid);
 
                             if(nextIDField<playerIDFields.length){
                                 playerIDFields[nextIDField].requestFocus();
@@ -199,10 +202,6 @@ public class View{
                             String codeName = controller.queryHandoff(id);
                             System.out.println("ID: " + field.getText() + " at index " + parallelIndex);
                             field.setBorder(new LineBorder(Color.BLACK,1));
-                            // Send ID to controller
-                            controller.addModelPlayer();
-                            controller.setID(id);
-                            controller.setTeam(parallelIndex);
                         if(codeName == null)
                         {
                             currentID = id;
@@ -215,8 +214,7 @@ public class View{
                             popUpFrame.setVisible(true);
                             popUpFrame.toFront();
                             enterEID.requestFocus();
-                            // Send Name to controller
-                            controller.setcodeName(codeName);
+                            
                         }
                         } catch(NumberFormatException e1 ) {
                             System.out.println("Invalid ID input. Must be an integer.");
@@ -245,7 +243,7 @@ public class View{
                         popUpFrame.setVisible(true);
                         popUpFrame.toFront();
                         enterEID.requestFocus();
-                        controller.setcodeName(field.getText());
+
                     }
                 }
         };
@@ -370,6 +368,29 @@ public class View{
         }
 
         c.setView(this);
+
+        JTextField countdownField = new JTextField(10);
+        panelCountDown.add(countdownField);
+        Timer countdownTimer = null;
+        if (countdownTimer == null)
+        {
+            System.out.print("In IF loop");
+        countdownTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.print("In countdown creation");
+                if (initialCountdownValue > 0) {
+                    initialCountdownValue--;
+                    countdownField.setText(Integer.toString(initialCountdownValue));
+                } else 
+                {
+                    System.out.print("Countdown Finished!");
+                    countdownField.setText("Countdown Finished!");
+                    cl.show(panelPlayAction, "2");
+                }
+            }
+        });
+    }
     }
 
     public int searchFieldsArray(JTextField[] array, JTextField source)
@@ -387,4 +408,7 @@ public class View{
 
         return index;
     }
+
+    
+    
 }
