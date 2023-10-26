@@ -48,6 +48,10 @@ class Model
 		Players.get(Players.size()-1).EquipmentID = EquipmentID;
 	}
 
+	public ArrayList<Player> getPlayerList(){
+		return Players;
+	}
+
 	public void printOut()
 	{
 		for(int i = 0; i < Players.size(); i++){
