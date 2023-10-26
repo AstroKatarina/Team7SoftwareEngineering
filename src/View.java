@@ -16,18 +16,12 @@ public class View{
     public static int popUpFrameWidth = 400, popUpFrameHeight = 200;
     
     private int nextIDField, currentID;
-    static int initialCountdownValue = 3;
-    static int remainingTime = 360;
-
-    public static Timer countDownTimer;
-    public static Timer sixMinuteCountDownTimer;
 
     Controller controller;
 
     JFrame frame = new JFrame("Photon");
     JPanel panelContainer = new JPanel();
     JPanel panelPlayAction = new JPanel();
-    JPanel panelCountDown = new JPanel();
     CardLayout cl = new CardLayout();
     
     //Declare objects for StartUp panel
@@ -58,6 +52,7 @@ public class View{
     JTextArea f12IntructionHeading = new JTextArea("Press F12 to Clear Entries");
     Font titleFont = new Font("Serif",Font.BOLD,30);
     Color playerEntryBackgroundColor = new Color(200,205,210);
+    
     //Delcare and initialize objects for the EID Prompt Popup
     JFrame popUpFrame = new JFrame("Enter Equipment ID");
     JPanel panelPromptPopUp = new JPanel();
@@ -98,16 +93,13 @@ public class View{
         panelPlayerEntry.setLayout(null);
         panelPlayAction.setLayout(null);
         panelPromptPopUp.setLayout(null);
-        panelCountDown.setLayout(null);
         panelPromptPopUp.setBackground(playerEntryBackgroundColor);
         panelPlayerEntry.setBackground(playerEntryBackgroundColor);
-        panelCountDown.setBackground(playerEntryBackgroundColor);
 
         //Add panels to the container panel set up with CardLayout
         panelContainer.add(panelStartup,"0");
         panelContainer.add(panelPlayerEntry,"1");
         panelContainer.add(panelPlayAction,"2");
-        panelContainer.add(panelCountDown, "3");
 
         //Choose which panel to display on opening
         cl.show(panelContainer,"0");
@@ -149,7 +141,7 @@ public class View{
                                 playerIDFields[nextIDField].requestFocus();
                             } else {
                                 playerIDFields[0].requestFocus();
-                        }
+                            }
                         }
                         catch(NumberFormatException e1) {
                             System.out.println("Invalid Equipment ID. ID must be an integer.");
@@ -371,46 +363,9 @@ public class View{
             y = startY;       
         }
 
-        
-        //Setting up Timer on Top of Play Action Screen
-        JTextField countdownField = new JTextField("Get Ready!");
-        countDownTimer = new Timer(1000, new ActionListener() 
-        {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (initialCountdownValue > 0) 
-                {                    
-                    countdownField.setText(formatTime(initialCountdownValue));
-                    initialCountdownValue--;                    
-                } 
-                else 
-                {
-                    countdownField.setText("The Game is Now Beginning");
-                    initialCountdownValue = 360;
-                    //countdownField.setText(formatTime(initialCountdownValue));
-                    //countDownTimer.stop();
-                }
-            }
-        });
-        //Adding presentable countDownField to Play action panel
-        countdownField.setBounds(0,10,frameWidth,60);
-        countdownField.setEditable(false);
-        countdownField.setHorizontalAlignment(JTextField.CENTER);
-        //countdownField.setBackground(null);
-        countdownField.setBorder(new LineBorder(Color.WHITE,0));
-        countdownField.setFont(titleFont);
-        panelCountDown.add(countdownField);
-        panelPlayAction.add(countdownField);
-        //adding player scores onto Play Action panel
-        
-        
-    c.setView(this);
+        c.setView(this);
     }
-    private String formatTime(int seconds) {
-        int minutes = seconds / 60;
-        int remainingSeconds = seconds % 60;
-        return String.format("%02d:%02d", minutes, remainingSeconds);
-    }
+
     public int searchFieldsArray(JTextField[] array, JTextField source)
     {
         int index = -1;
@@ -426,7 +381,4 @@ public class View{
 
         return index;
     }
-
-    
-    
 }
