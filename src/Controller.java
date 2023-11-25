@@ -16,12 +16,13 @@ class Controller implements ActionListener, MouseListener, KeyListener
     View view;
     Model model;
     DBController dbController;
+    MusicPlayer musicPlayer;
 
-	Controller(Model m, DBController db) 
+	Controller(Model m, DBController db, MusicPlayer mp) 
 	{
         this.model = m;
         this.dbController = db;
-        
+        this.musicPlayer = mp;
     }
 
     void setView(View v) 
@@ -87,6 +88,7 @@ class Controller implements ActionListener, MouseListener, KeyListener
                         View.countDownTimer.start();
                     }
                     startGame();
+                    musicPlayer.startPlayingWAV();
 
                     break;
                 case KeyEvent.VK_F1:
