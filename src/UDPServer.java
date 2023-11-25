@@ -5,7 +5,7 @@ import java.io.*;
 
 // For receiving information from the traffic generator
 public class UDPServer {
-    public static void main(String[] args) throws IOException {
+    public static void collectData() throws IOException {
         try {
             // Create a UDP socket to listen on a specific port (e.g., 12345)
             DatagramSocket serverSocket = new DatagramSocket(7501);
@@ -24,7 +24,7 @@ public class UDPServer {
 
                 // Message Processing
                 // Splits the int:int message into two integers for processing
-                public Players[] = message.split(":");
+                public gamePlayers[] = message.split(":");
 
                 // Players[0] will be equipment ID of player transmitting (Get Points)
 
