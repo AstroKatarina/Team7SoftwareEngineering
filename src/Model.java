@@ -12,6 +12,11 @@ class Model
 	}
 
 	public void update()
+	public ArrayList<Player> getPlayerList(){
+		return Players;
+	}
+
+	public void printOut()
 	{
 		
 	}

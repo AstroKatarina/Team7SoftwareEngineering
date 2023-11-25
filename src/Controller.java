@@ -7,6 +7,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 class Controller implements ActionListener, MouseListener, KeyListener 
@@ -81,7 +83,11 @@ class Controller implements ActionListener, MouseListener, KeyListener
                     clearEntries();
                     break;
                 case KeyEvent.VK_F5:
+                    if (View.countDownTimer != null && !View.countDownTimer.isRunning()) {
+                        View.countDownTimer.start();
+                    }
                     startGame();
+
                     break;
            }
         
@@ -111,6 +117,8 @@ class Controller implements ActionListener, MouseListener, KeyListener
     private void startGame()
     {
         view.cl.show(view.panelContainer,"3");
+        view.cl.show(view.panelContainer,"2");
+        view.setupPlayActionPlayers();
     }
 
     private void clearEntries()
@@ -124,5 +132,45 @@ class Controller implements ActionListener, MouseListener, KeyListener
             field.setText(null);
         }
     }
+    
+}
+
+    public void setID(int ID){
+        model.setPlayerID(ID);
+    }
+
+    public void setcodeName(String codeName){
+        model.setPlayerCodeName(codeName);
+    }
+
+     public void setTeam(int parallelIndex){
+        if((parallelIndex >=0 && parallelIndex <= 14))
+        {
+            model.setPlayerTeam(0);
+        }
+        else
+        {
+            model.setPlayerTeam(1);
+        }
+    }
+
+    public void setScore(int Score){
+        model.setPlayerScore(Score);
+    }
+
+     public void setEquipmentID(int EquipmentID){
+        model.setPlayerEquipmentID(EquipmentID);
+    }
+
+    public void addModelPlayer()
+    {
+        model.addPlayer();
+    }
+
+    public ArrayList<Player> getModelPlayerList()
+    {
+        return model.getPlayerList();
+    }
+
     
 }
