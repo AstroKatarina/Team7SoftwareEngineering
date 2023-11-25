@@ -17,7 +17,7 @@ public class UDPServer {
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 
                 // Wait for a UDP packet to arrive
-                socket.receive(receivePacket);
+                serverSocket.receive(receivePacket);
 
                 String message = new String(receivePacket.getData(), 0, receivePacket.getLength());
                 System.out.println("Received message from client: " + message);
@@ -27,7 +27,7 @@ public class UDPServer {
                 public Players[] = message.split(":");
 
                 // Players[0] will be equipment ID of player transmitting (Get Points)
-                
+
                 // Players[1] will be equipment ID of player that got hit
                 
                 // Clear the receive buffer for the next message
@@ -37,7 +37,7 @@ public class UDPServer {
             e.printStackTrace();
         } finally {
             if (socket != null && !socket.isClosed()) {
-                socket.close();
+                serverSocket.close();
             }
         }
     }
