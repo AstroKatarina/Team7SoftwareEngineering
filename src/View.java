@@ -17,6 +17,7 @@ public class View{
     public static int popUpFrameWidth = 400, popUpFrameHeight = 200;
     
     private int nextIDField, currentID;
+    static int initialCountdownValue = 0;
     static int initialCountdownValue = 30;
     static int remainingTime = 360;
 
@@ -216,10 +217,6 @@ public class View{
                             String codeName = controller.queryHandoff(id);
                             System.out.println("ID: " + field.getText() + " at index " + parallelIndex);
                             field.setBorder(new LineBorder(Color.BLACK,1));
-                            // Send ID to controller
-                            controller.addModelPlayer();
-                            controller.setID(id);
-                            controller.setTeam(parallelIndex);
                         if(codeName == null)
                         {
                             currentID = id;
@@ -234,7 +231,7 @@ public class View{
                             popUpFrame.toFront();
                             enterEID.requestFocus();
                             
-                            
+
                         }
                         } catch(NumberFormatException e1 ) {
                             System.out.println("Invalid ID input. Must be an integer.");
@@ -387,6 +384,31 @@ public class View{
             y = startY;       
         }
 
+        c.setView(this);
+
+        JTextField countdownField = new JTextField(10);
+        panelCountDown.add(countdownField);
+        Timer countdownTimer = null;
+        if (countdownTimer == null)
+        {
+            System.out.print("In IF loop");
+        countdownTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.print("In countdown creation");
+                if (initialCountdownValue > 0) {
+                    initialCountdownValue--;
+                    countdownField.setText(Integer.toString(initialCountdownValue));
+                } else 
+                {
+                    System.out.print("Countdown Finished!");
+                    countdownField.setText("Countdown Finished!");
+                    cl.show(panelPlayAction, "2");
+                }
+            }
+        });
+    }
+    }
         //setting up play action screen
 
          //adding player scores (upper) and Events (lower) panels onto Play Action panel 
@@ -497,6 +519,9 @@ public class View{
         return index;
     }
 
+    
+    
+}
     public void setupPlayActionPlayers()
     {
         playerScoreFields = new JTextField[30];
