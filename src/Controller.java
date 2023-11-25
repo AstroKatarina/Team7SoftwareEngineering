@@ -89,6 +89,9 @@ class Controller implements ActionListener, MouseListener, KeyListener
                     startGame();
 
                     break;
+                case KeyEvent.VK_F1:
+                    model.printOut();
+                    break;
            }
         
                 
@@ -116,7 +119,6 @@ class Controller implements ActionListener, MouseListener, KeyListener
 
     private void startGame()
     {
-        view.cl.show(view.panelContainer,"3");
         view.cl.show(view.panelContainer,"2");
         view.setupPlayActionPlayers();
     }
@@ -132,8 +134,6 @@ class Controller implements ActionListener, MouseListener, KeyListener
             field.setText(null);
         }
     }
-    
-}
 
     public void setID(int ID){
         model.setPlayerID(ID);
