@@ -8,7 +8,7 @@ public class UDPClient {
             DatagramSocket socket = new DatagramSocket();
 
             // Define the server address and port (e.g., localhost and 12345)
-            InetAddress serverAddress = InetAddress.getByName("10.35.11.109");
+            InetAddress serverAddress = InetAddress.getByName("127.0.0.1");
             int serverPort = 7500;
            
             // Initializing packet to null
