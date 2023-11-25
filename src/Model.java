@@ -57,4 +57,40 @@ class Model
 		
 	}
 
+	public void addScore()
+	{
+		// Enter code to properly deal with information from traffic generator
+		int hitPlayerID = UDPServer.Players[0];
+		int scorePlayerID = UDPServer.Players[1];
+
+		// CHECK hit player for base hit
+
+		// Red Base Hit
+		// if((hitPlayerID == 53) //&& (NOT RED TEAM)
+		{
+			// Add 100 points to scorePlayerID
+			// Add B next to codename
+		}
+
+		// Green Base Hit
+		// if((hitPlayerID == 43) && (NOT GREEN TEAM)
+		{
+			// Add 100 points to scorePlayerID
+			// Add B next to codename
+		}
+
+		// Update score
+		// Add 10 points to scorePlayerID
+
+		// Check for Team Kill
+		// if(hitPlayerID TEAM = scoreplayerID TEAM)
+		{
+			// Transmit scorePlayerID by calling UDPClient(scorePlayerID)
+		}
+		// else
+		{
+			// Transmit hitPlayerID by calling UDPClient(hitPlayerID)
+		}
+	}
+
 }
