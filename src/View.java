@@ -504,6 +504,7 @@ public class View{
                    
                     countdownField.setText("The Game is Now Beginning");
                     initialCountdownValue = 360;
+                    UDPClient.sendData(202);
                     //countdownField.setText(formatTime(initialCountdownValue));
                     //countDownTimer.stop();
                 }
