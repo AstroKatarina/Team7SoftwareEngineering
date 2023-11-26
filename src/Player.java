@@ -34,4 +34,9 @@ class Player
         EquipmentID = 0;
     }
 
+    int getEquipmentID()
+    {
+        return EquipmentID;
+    }
+
 }

@@ -6,9 +6,9 @@ import java.io.*;
 // For receiving information from the traffic generator
 public class UDPServer {
     public static void collectData() throws IOException {
+        DatagramSocket serverSocket = new DatagramSocket(7501);
         try {
             // Create a UDP socket to listen on a specific port (e.g., 12345)
-            DatagramSocket serverSocket = new DatagramSocket(7501);
             byte[] receiveData = new byte[1024];
 
             System.out.println("UDP Server is running...");
@@ -24,7 +24,18 @@ public class UDPServer {
 
                 // Message Processing
                 // Splits the int:int message into two integers for processing
-                public Array gamePlayers[] = message.split(":");
+                String[] gamePlayers = message.split(":");
+
+                String hitPlayer = gamePlayers[0];
+                String scorePlayer = gamePlayers[1];
+
+                // Convert String to int using Integer.parseInt()
+                int number1 = Integer.parseInt(hitPlayer);
+
+                // Convert String to int using Integer.parseInt()
+                int number2 = Integer.parseInt(scorePlayer);
+
+                Model.addScore(number1, number2);
 
                 // Players[0] will be equipment ID of player transmitting (Get Points)
 

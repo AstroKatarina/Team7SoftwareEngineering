@@ -58,26 +58,26 @@ class Model
 	}
 
     // Function to search ArrayList for a given ID and return index
-    public static int searchInt(ArrayList<Integer> numbers, int searchTerm) {
-        for (int i = 0; i < numbers.size(); i++) {
-            if (numbers.get(i) == searchTerm) {
+    public static int searchInt(int searchTerm) {
+        for (int i = 0; i < Players.size(); i++) {
+            if (Players.get(i).getEquipmentID() == searchTerm) {
                 return i; // Return the index if found
             }
         }
         return -1; // Return -1 if not found
     }
 
-	public void addScore()
+	public static void addScore(int hit, int score)
 	{
 		// Enter code to properly deal with information from traffic generator
-		int hitPlayerID = UDPServer.gamePlayers[0];
-		int scorePlayerID = UDPServer.gamePlayers[1];
+		int hitPlayerID = hit;
+		int scorePlayerID = score;
 
 		// Search the ArrayList to find the proper index
 
 		// Call the search function
         int searchTerm = hitPlayerID;
-        int foundIndex = searchInt(Players<>, searchTerm);
+        int foundIndex = searchInt(searchTerm);
 
         if (foundIndex != -1) {
             System.out.println("Integer " + searchTerm + " found at index: " + foundIndex);
@@ -86,8 +86,8 @@ class Model
         }
 
 		// Call the search function again for the scorer
-		int searchTerm = scorePlayerID;
-        int foundIndex2 = searchInt(Players<>, searchTerm);
+		int searchTerm2 = scorePlayerID;
+        int foundIndex2 = searchInt(searchTerm2);
 
         if (foundIndex2 != -1) {
             System.out.println("Integer " + searchTerm + " found at index: " + foundIndex2);
@@ -98,30 +98,30 @@ class Model
 		// CHECK hit player for base hit
 
 		// Red Base Hit
-		if((hitPlayerID == 53) && (Players<foundIndex2>.Team == 0)) // Scorer on Green Team
+		if((hitPlayerID == 53) && (Players.get(foundIndex2).Team == 0)) // Scorer on Green Team
 		{
-			Players<foundIndex>.score += 100;
+			Players.get(foundIndex).Score += 100;
 			// Add B next to codename
 		}
 
 		// Green Base Hit
-		if((hitPlayerID == 43) && (Players<foundIndex2>.Team == 1)) // Scorer on Red Team
+		if((hitPlayerID == 43) && (Players.get(foundIndex2).Team == 1)) // Scorer on Red Team
 		{
-			Players<foundIndex>.score += 100;
+			Players.get(foundIndex).Score += 100;
 			// Add B next to codename
 		}
 
 		// Update score
-		Players<foundIndex2>.score += 10;
+		Players.get(foundIndex2).Score += 10;
 
 		// Check for Team Kill
-		if(Players<foundIndex>.Team == Players<foundIndex2>.Team)
+		if(Players.get(foundIndex).Team == Players.get(foundIndex2).Team)
 		{
-			UDPClient.sendData(Players<foundIndex2>.EquipmentID);
+			UDPClient.sendData(Players.get(foundIndex2).EquipmentID);
 		}
 		else
 		{
-			UDPClient.sendData(Players<foundIndex>.EquipmentID);
+			UDPClient.sendData(Players.get(foundIndex).EquipmentID);
 		}
 	}
 
