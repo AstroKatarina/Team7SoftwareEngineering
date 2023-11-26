@@ -56,6 +56,7 @@ public class UDPServer implements Runnable{
 
     @Override
     public void run() {
+        System.out.println("Thread about to start server\n");
         startServer(); // Start the server when this thread starts running
     }
 }
