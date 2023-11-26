@@ -13,10 +13,9 @@ class Model
 		Players = new ArrayList<Player>();
 	}
 
-	public void addPlayer()
+	public void addPlayer(Player player)
 	{
-		Player gamer = new Player();
-		Players.add(Players.size(), gamer);
+		Players.add(Players.size(), player);
 	}
 
 	// Set last player in arraylist attributes with setter
@@ -47,6 +46,10 @@ class Model
 	public void setPlayerEquipmentID(int EquipmentID)
 	{
 		Players.get(Players.size()-1).EquipmentID = EquipmentID;
+	}
+
+	public ArrayList<Player> getPlayerList(){
+		return Players;
 	}
 
 	public void printOut()
