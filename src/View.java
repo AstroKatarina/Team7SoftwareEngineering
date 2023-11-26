@@ -512,7 +512,6 @@ public class View{
                 {
                     if(player.Team == i)
                     {
-                        System.out.println("I'm doing it");
                         playerActionNameFields[j+(15*i)] = new JTextField();
                         playerActionNameFields[j+(15*i)].setText(player.CodeName);
                         playerActionNameFields[j+(15*i)].setBounds(x,y,width,height);
