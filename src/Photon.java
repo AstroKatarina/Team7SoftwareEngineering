@@ -47,5 +47,14 @@ public class Photon
                 photon.view.popUpFrame.repaint();
             }
         });
+
+        // Create an instance of UDPServer
+        UDPServer udpServer = new UDPServer();
+
+        // Create a thread for the UDPServer
+        Thread serverThread = new Thread(udpServer);
+
+        // Start the thread
+        serverThread.start();
     }
 }
