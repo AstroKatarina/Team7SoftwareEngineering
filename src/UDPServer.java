@@ -24,7 +24,7 @@ public class UDPServer {
 
                 // Message Processing
                 // Splits the int:int message into two integers for processing
-                public gamePlayers[] = message.split(":");
+                public Array gamePlayers[] = message.split(":");
 
                 // Players[0] will be equipment ID of player transmitting (Get Points)
 
@@ -36,7 +36,7 @@ public class UDPServer {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (socket != null && !socket.isClosed()) {
+            if (serverSocket != null && !serverSocket.isClosed()) {
                 serverSocket.close();
             }
         }
