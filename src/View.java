@@ -20,8 +20,8 @@ public class View{
     static int initialCountdownValue = 30;
     static int remainingTime = 360;
 
-    public static Timer countDownTimer;
-    public static Timer sixMinuteCountDownTimer;
+    public static Timer firstCountDownTimer;
+    public static Timer secondCountDownTimer;
 
     Controller controller;
 
@@ -71,6 +71,7 @@ public class View{
     JPanel panelPromptPopUp = new JPanel();
     JTextField enterEID = new JTextField();
     JTextField entryPrompt = new JTextField();
+    ArrayList<Player> tempPlayersList = new ArrayList<Player>();
     
     //PlayAction Panel objects
     JTextField[] playerScoreFields, playerActionNameFields;
@@ -147,9 +148,9 @@ public class View{
                         try{
                             
                             int eid = Integer.parseInt(field.getText());
+                            tempPlayersList.get(tempPlayersList.size()-1).EquipmentID = eid;
                             System.out.println("Equipment ID: " + eid);
                             UDPClient.sendData(eid);
-                            controller.setEquipmentID(eid);
                             
                             field.setBorder(new LineBorder(Color.BLACK,1));
                             field.setText(null);
@@ -213,13 +214,11 @@ public class View{
                         
                         try{
                             int id = Integer.parseInt(field.getText());
+                            tempPlayersList.add(new Player(id,null,currentID/14,0));
                             String codeName = controller.queryHandoff(id);
                             System.out.println("ID: " + field.getText() + " at index " + parallelIndex);
                             field.setBorder(new LineBorder(Color.BLACK,1));
                             // Send ID to controller
-                            controller.addModelPlayer();
-                            controller.setID(id);
-                            controller.setTeam(parallelIndex);
                         if(codeName == null)
                         {
                             currentID = id;
@@ -227,8 +226,8 @@ public class View{
                             playerNameFields[parallelIndex].setBorder(new LineBorder(Color.GREEN,1));
                             playerNameFields[parallelIndex].setEditable(true);
                         } else {
+                            tempPlayersList.get(tempPlayersList.size()-1).CodeName = codeName;
                             playerNameFields[parallelIndex].setText(codeName);
-                            controller.setcodeName(codeName);
                             entryPrompt.setText("Enter " + codeName + "'s equipment ID and press return.");
                             popUpFrame.setVisible(true);
                             popUpFrame.toFront();
@@ -254,8 +253,8 @@ public class View{
                     if (obj instanceof JTextField) {
                         JTextField field = (JTextField)obj;
                         System.out.println("Name = " + field.getText());
-                        controller.setcodeName(field.getText());
                         controller.insertCodename(currentID,field.getText());
+                        tempPlayersList.get(tempPlayersList.size()-1).CodeName = field.getText();
 
                         field.setEditable(false);
                         field.setBorder(new LineBorder(Color.BLACK,1));
@@ -443,7 +442,7 @@ public class View{
 
         //Setting up Timer on Top of Play Action Screen
         JTextField countdownField = new JTextField("Get Ready!");
-        countDownTimer = new Timer(1000, new ActionListener() 
+        secondCountDownTimer = new Timer(1000, new ActionListener() 
         {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -456,13 +455,50 @@ public class View{
                 {
                      // Add the upper and lower panels to the panelPlayAction
                    
-                    countdownField.setText("The Game is Now Beginning");
-                    initialCountdownValue = 360;
-                    //countdownField.setText(formatTime(initialCountdownValue));
-                    //countDownTimer.stop();
+                    countdownField.setText("The Game Has Now Ended");
+                    try {
+                        UDPClient.sendData(221);
+                        UDPClient.sendData(221);
+                        UDPClient.sendData(221);
+                    } catch (IOException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                    secondCountDownTimer.stop();
                 }
             }
         });
+
+        firstCountDownTimer = new Timer(1000, new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (initialCountdownValue > 0) 
+                {                    
+                    countdownField.setText(formatTime(initialCountdownValue));
+                    initialCountdownValue--;                    
+                } 
+                else 
+                {
+                     // Add the upper and lower panels to the panelPlayAction
+                   
+                    countdownField.setText("The Game Is Now Beginning");
+                    initialCountdownValue = 360;
+                    try {
+                        UDPClient.sendData(202);
+                    } catch (IOException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                    countdownField.setText(formatTime(initialCountdownValue));
+                    if (View.secondCountDownTimer != null && !View.secondCountDownTimer.isRunning()) {
+                        View.secondCountDownTimer.start();
+                    }
+                    firstCountDownTimer.stop();
+                }
+            }
+        });
+
         //Adding presentable countDownField to Play action panel
         countdownField.setBounds(0,10,frameWidth,60);
         countdownField.setEditable(false);
@@ -476,11 +512,17 @@ public class View{
         
     c.setView(this);
     }
+
+
+
+
+    
     private String formatTime(int seconds) {
         int minutes = seconds / 60;
         int remainingSeconds = seconds % 60;
         return String.format("%02d:%02d", minutes, remainingSeconds);
     }
+
     public int searchFieldsArray(JTextField[] array, JTextField source)
     {
         int index = -1;
@@ -495,6 +537,14 @@ public class View{
         }
 
         return index;
+    }
+
+    public void setPlayersList()
+    {
+        for(Player player:tempPlayersList)
+        {
+            controller.addModelPlayer(player);
+        }
     }
 
     public void setupPlayActionPlayers()
@@ -512,7 +562,6 @@ public class View{
                 {
                     if(player.Team == i)
                     {
-                        System.out.println("I'm doing it");
                         playerActionNameFields[j+(15*i)] = new JTextField();
                         playerActionNameFields[j+(15*i)].setText(player.CodeName);
                         playerActionNameFields[j+(15*i)].setBounds(x,y,width,height);

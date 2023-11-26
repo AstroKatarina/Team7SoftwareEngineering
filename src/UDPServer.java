@@ -3,36 +3,53 @@
 import java.net.*;
 import java.io.*;
 
-
+// For receiving information from the traffic generator
 public class UDPServer {
-    public static void main(String[] args) {
-        DatagramSocket socket = null;
-
+    
+    public static void collectData() throws IOException {
+        DatagramSocket serverSocket = new DatagramSocket(7501);
         try {
             // Create a UDP socket to listen on a specific port (e.g., 12345)
-            socket = new DatagramSocket(7500);
-
             byte[] receiveData = new byte[1024];
+
+            System.out.println("UDP Server is running...");
 
             while (true) {
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-
+                
                 // Wait for a UDP packet to arrive
-                socket.receive(receivePacket);
+                serverSocket.receive(receivePacket);
 
                 String message = new String(receivePacket.getData(), 0, receivePacket.getLength());
                 System.out.println("Received message from client: " + message);
 
-                // You can process the received message here
+                // Message Processing
+                // Splits the int:int message into two integers for processing
+                String[] gamePlayers = message.split(":");
 
+                String hitPlayer = gamePlayers[0];
+                String scorePlayer = gamePlayers[1];
+
+                // Convert String to int using Integer.parseInt()
+                int number1 = Integer.parseInt(hitPlayer);
+
+                // Convert String to int using Integer.parseInt()
+                int number2 = Integer.parseInt(scorePlayer);
+
+                Model.addScore(number1, number2);
+
+                // Players[0] will be equipment ID of player transmitting (Get Points)
+
+                // Players[1] will be equipment ID of player that got hit
+                
                 // Clear the receive buffer for the next message
                 receiveData = new byte[1024];
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (socket != null && !socket.isClosed()) {
-                socket.close();
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                serverSocket.close();
             }
         }
     }

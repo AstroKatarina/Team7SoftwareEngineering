@@ -83,8 +83,8 @@ class Controller implements ActionListener, MouseListener, KeyListener
                     clearEntries();
                     break;
                 case KeyEvent.VK_F5:
-                    if (View.countDownTimer != null && !View.countDownTimer.isRunning()) {
-                        View.countDownTimer.start();
+                    if (View.firstCountDownTimer != null && !View.firstCountDownTimer.isRunning()) {
+                        View.firstCountDownTimer.start();
                     }
                     startGame();
 
@@ -120,6 +120,7 @@ class Controller implements ActionListener, MouseListener, KeyListener
     private void startGame()
     {
         view.cl.show(view.panelContainer,"2");
+        view.setPlayersList();
         view.setupPlayActionPlayers();
     }
 
@@ -162,9 +163,9 @@ class Controller implements ActionListener, MouseListener, KeyListener
         model.setPlayerEquipmentID(EquipmentID);
     }
 
-    public void addModelPlayer()
+    public void addModelPlayer(Player player)
     {
-        model.addPlayer();
+        model.addPlayer(player);
     }
 
     public ArrayList<Player> getModelPlayerList()
