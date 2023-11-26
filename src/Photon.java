@@ -23,6 +23,33 @@ public class Photon
 
 	public static void main(String[] args){
         
+        System.out.println("Creating server");
+        // Create an instance of UDPServe
+        UDPServer udpServer = new UDPServer();
+
+        // Create a thread for the UDPServer
+        Thread serverThread = new Thread(udpServer);
+
+        // Start the thread
+        serverThread.start();
+
+        try {
+            // Command to execute the Python script
+            String pythonScriptPath = "C:\Users\evanb\OneDrive\Documents\SoftwareEngineering\Team7SoftwareEngineering\src\trafficgenarator_v2.py";
+            String[] command = {"python", pythonScriptPath};
+
+            // Start the process
+            ProcessBuilder pb = new ProcessBuilder(command);
+            Process process = pb.start();
+
+            // Wait for the process to finish (optional)
+            int exitCode = process.waitFor();
+            System.out.println("Python script exited with code: " + exitCode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         Photon photon = new Photon();
 
         TimerTask task = new TimerTask() {
@@ -47,14 +74,5 @@ public class Photon
                 photon.view.popUpFrame.repaint();
             }
         });
-
-        // Create an instance of UDPServer
-        UDPServer udpServer = new UDPServer();
-
-        // Create a thread for the UDPServer
-        Thread serverThread = new Thread(udpServer);
-
-        // Start the thread
-        serverThread.start();
     }
 }
