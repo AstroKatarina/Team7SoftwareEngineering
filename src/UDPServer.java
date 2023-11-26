@@ -5,6 +5,7 @@ import java.io.*;
 
 // For receiving information from the traffic generator
 public class UDPServer {
+    
     public static void collectData() throws IOException {
         DatagramSocket serverSocket = new DatagramSocket(7501);
         try {

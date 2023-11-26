@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class View{
@@ -70,6 +71,7 @@ public class View{
     JPanel panelPromptPopUp = new JPanel();
     JTextField enterEID = new JTextField();
     JTextField entryPrompt = new JTextField();
+    ArrayList<Player> tempPlayersList;
     
     //PlayAction Panel objects
     JTextField[] playerScoreFields, playerActionNameFields;
@@ -146,6 +148,7 @@ public class View{
                         try{
                             
                             int eid = Integer.parseInt(field.getText());
+                            tempPlayersList.get(tempPlayersList.size()-1).EquipmentID = eid;
                             System.out.println("Equipment ID: " + eid);
                             UDPClient.sendData(eid);
                             
@@ -211,6 +214,7 @@ public class View{
                         
                         try{
                             int id = Integer.parseInt(field.getText());
+                            tempPlayersList.add(new Player(id,null,currentID/15,0));
                             String codeName = controller.queryHandoff(id);
                             System.out.println("ID: " + field.getText() + " at index " + parallelIndex);
                             field.setBorder(new LineBorder(Color.BLACK,1));
@@ -221,6 +225,7 @@ public class View{
                             playerNameFields[parallelIndex].setBorder(new LineBorder(Color.GREEN,1));
                             playerNameFields[parallelIndex].setEditable(true);
                         } else {
+                            tempPlayersList.get(tempPlayersList.size()-1).CodeName = codeName;
                             playerNameFields[parallelIndex].setText(codeName);
                             entryPrompt.setText("Enter " + codeName + "'s equipment ID and press return.");
                             popUpFrame.setVisible(true);
@@ -247,6 +252,7 @@ public class View{
                         JTextField field = (JTextField)obj;
                         System.out.println("Name = " + field.getText());
                         controller.insertCodename(currentID,field.getText());
+                        tempPlayersList.get(tempPlayersList.size()-1).CodeName = field.getText();
 
                         field.setEditable(false);
                         field.setBorder(new LineBorder(Color.BLACK,1));
@@ -504,7 +510,12 @@ public class View{
                    
                     countdownField.setText("The Game is Now Beginning");
                     initialCountdownValue = 360;
-                    UDPClient.sendData(202);
+                    try {
+                        UDPClient.sendData(202);
+                    } catch (IOException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
                     //countdownField.setText(formatTime(initialCountdownValue));
                     //countDownTimer.stop();
                 }

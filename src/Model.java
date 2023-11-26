@@ -1,11 +1,12 @@
 //Software Engineering Team #7
 //Model File for Laser Tag Project
 
+import java.io.IOException;
 import java.util.ArrayList;
 class Model
 {
 
-	ArrayList<Player> Players;
+	static ArrayList<Player> Players;
 	
 	Model()
 	{
@@ -117,11 +118,21 @@ class Model
 		// Check for Team Kill
 		if(Players.get(foundIndex).Team == Players.get(foundIndex2).Team)
 		{
-			UDPClient.sendData(Players.get(foundIndex2).EquipmentID);
+			try {
+				UDPClient.sendData(Players.get(foundIndex2).EquipmentID);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else
 		{
-			UDPClient.sendData(Players.get(foundIndex).EquipmentID);
+			try {
+				UDPClient.sendData(Players.get(foundIndex).EquipmentID);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
