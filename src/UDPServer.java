@@ -4,9 +4,9 @@ import java.net.*;
 import java.io.*;
 
 // For receiving information from the traffic generator
-public class UDPServer {
+public class UDPServer implements Runnable{
     
-    public static void collectData() throws IOException {
+    public void startServer() throws IOException {
         DatagramSocket serverSocket = new DatagramSocket(7501);
         try {
             // Create a UDP socket to listen on a specific port (e.g., 12345)
@@ -52,5 +52,16 @@ public class UDPServer {
                 serverSocket.close();
             }
         }
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Thread about to start server\n");
+        try {
+            startServer();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } // Start the server when this thread starts running
     }
 }
