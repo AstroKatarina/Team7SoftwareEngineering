@@ -57,6 +57,11 @@ public class UDPServer implements Runnable{
     @Override
     public void run() {
         System.out.println("Thread about to start server\n");
-        startServer(); // Start the server when this thread starts running
+        try {
+            startServer();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } // Start the server when this thread starts running
     }
 }
