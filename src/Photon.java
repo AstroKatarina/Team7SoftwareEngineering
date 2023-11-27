@@ -22,9 +22,16 @@ public class Photon
         UDPServer udpServer = new UDPServer();
 
         // Create a thread for the UDPServer
-        Thread serverThread = new Thread(udpServer);
+        Thread serverThread = new Thread(() -> {
+            try {
+                udpServer.startServer();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Caught error");
+            }
+        });
 
-        // Start the thread
+        // Thread should run and execute startServer in UDPServer
         serverThread.start();
 	}
 
