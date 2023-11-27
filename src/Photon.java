@@ -12,11 +12,12 @@ public class Photon
     Controller controller;
     View view;
     DBController dbController = new DBController();
+    MusicPlayer musicPlayer = new MusicPlayer();
 
     public Photon() 
 	{
         System.out.println("test");
-		this.controller = new Controller(this.model, this.dbController);
+		this.controller = new Controller(this.model, this.dbController, this.musicPlayer);
         view = new View(this.controller);
 
         // Create instance of UDPServer
@@ -41,7 +42,6 @@ public class Photon
 	public static void main(String[] args){
 
         Photon photon = new Photon();
-
         TimerTask task = new TimerTask() {
             public void run() {
                 photon.view.cl.show(photon.view.panelContainer,"1");
