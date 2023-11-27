@@ -17,7 +17,7 @@ public class MusicPlayer {
         Random rand = new Random();
         int trackNum = rand.nextInt(3);
         trackNum = trackNum + 1;
-        String file = ("src/Track0" + trackNum + ".wav");
+        String file = ("lib/Track0" + trackNum + ".wav");
         System.out.println(file);
         PlayMusic(file);
     }
