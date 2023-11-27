@@ -14,17 +14,11 @@ public class Photon
 
     public Photon() 
 	{
-
 		this.controller = new Controller(this.model, this.dbController);
         view = new View(this.controller);
-        
-	}
 
-
-	public static void main(String[] args){
-        
+        // Create instance of UDPServer
         System.out.println("Creating server");
-        // Create an instance of UDPServe
         UDPServer udpServer = new UDPServer();
 
         // Create a thread for the UDPServer
@@ -32,23 +26,10 @@ public class Photon
 
         // Start the thread
         serverThread.start();
+	}
 
-        try {
-            // Command to execute the Python script
-            String pythonScriptPath = "C:\Users\evanb\OneDrive\Documents\SoftwareEngineering\Team7SoftwareEngineering\src\trafficgenarator_v2.py";
-            String[] command = {"python", pythonScriptPath};
 
-            // Start the process
-            ProcessBuilder pb = new ProcessBuilder(command);
-            Process process = pb.start();
-
-            // Wait for the process to finish (optional)
-            int exitCode = process.waitFor();
-            System.out.println("Python script exited with code: " + exitCode);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	public static void main(String[] args){
 
         Photon photon = new Photon();
 
