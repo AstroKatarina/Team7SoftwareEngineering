@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -121,10 +122,42 @@ class Controller implements ActionListener, MouseListener, KeyListener
 
     private void startGame()
     {
+        Photon.action = true;
         view.cl.show(view.panelContainer,"2");
         view.setPlayersList();
         view.setupPlayActionPlayers();
+
+        // Create instance of UDPServer
+        System.out.println("Creating server");
+        UDPServer udpServer = new UDPServer();
+
+        // Create a thread for the UDPServer
+        Thread serverThread = new Thread(() -> {
+            try {
+                udpServer.startServer();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Caught error");
+            }
+        });
+
+        // Thread should run and execute startServer in UDPServer
+        serverThread.start();
     }
+
+    public void endGame()
+    {
+        Photon.action = false;
+        try {
+            UDPClient.sendData(221);
+            UDPClient.sendData(221);
+            UDPClient.sendData(221);
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+    }
+    
 
     private void clearEntries()
     {
@@ -136,6 +169,7 @@ class Controller implements ActionListener, MouseListener, KeyListener
         {
             field.setText(null);
         }
+        view.tempPlayersList.clear();
     }
 
     public void setID(int ID){
@@ -175,5 +209,10 @@ class Controller implements ActionListener, MouseListener, KeyListener
         return model.getPlayerList();
     }
 
+    public void updateStuff()
+    {
+        model.sortPlayerScores();
+        view.reorderScoreboard();
+    }
     
 }

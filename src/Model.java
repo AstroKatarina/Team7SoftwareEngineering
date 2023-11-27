@@ -105,18 +105,27 @@ class Model
 		if((hitPlayerID == 53) && (Players.get(foundIndex2).Team == 0)) // Scorer on Green Team
 		{
 			Players.get(foundIndex).Score += 100;
+			View.eventTextArea.append(Players.get(foundIndex2).CodeName + " has hit the base and now has a score of " + Players.get(foundIndex2).Score+"\n");
+			View.eventTextArea.setCaretPosition(View.eventTextArea.getDocument().getLength());
 			// Add B next to codename
 		}
 
 		// Green Base Hit
-		if((hitPlayerID == 43) && (Players.get(foundIndex2).Team == 1)) // Scorer on Red Team
+		else if((hitPlayerID == 43) && (Players.get(foundIndex2).Team == 1)) // Scorer on Red Team
 		{
 			Players.get(foundIndex).Score += 100;
+			View.eventTextArea.append(Players.get(foundIndex2).CodeName + " has hit the base and now has a score of " + Players.get(foundIndex2).Score+"\n");
+			View.eventTextArea.setCaretPosition(View.eventTextArea.getDocument().getLength());
 			// Add B next to codename
 		}
 
 		// Update score
-		Players.get(foundIndex2).Score += 10;
+		else {
+			Players.get(foundIndex2).Score += 10;
+			System.out.println(Players.get(foundIndex2).CodeName + " has hit " + Players.get(foundIndex).CodeName + " and now has a score of " + Players.get(foundIndex2).Score+"\n");
+			View.eventTextArea.append(Players.get(foundIndex2).CodeName + " has hit " + Players.get(foundIndex).CodeName + " and now has a score of " + Players.get(foundIndex2).Score+"\n");
+			View.eventTextArea.setCaretPosition(View.eventTextArea.getDocument().getLength());
+		}	
 
 		// Check for Team Kill
 		if(Players.get(foundIndex).Team == Players.get(foundIndex2).Team)
@@ -137,6 +146,32 @@ class Model
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void sortPlayerScores()
+	{
+		Player player1, player2, temp;
+		int highestIndex;
+		for(int i = 0; i < Players.size();i++)
+		{
+			player1 = Players.get(i);
+			temp = player1;
+			highestIndex = i;
+			for(int j = 0; j < Players.size(); j++)
+			{
+				player2 = Players.get(j);
+				if (player1!=player2)
+				{
+					if(player2.Score > temp.Score)
+					{
+						highestIndex = j;
+					}
+				}
+			}
+			Players.set(i,Players.get(highestIndex));
+			Players.set(highestIndex,temp);
+		}
+
 	}
 
 }

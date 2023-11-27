@@ -7,7 +7,7 @@ import java.io.*;
 public class UDPServer implements Runnable{
     
     public void startServer() throws IOException {
-        DatagramSocket serverSocket = new DatagramSocket(7501);
+        DatagramSocket serverSocket = new DatagramSocket(7500);
         try {
             // Create a UDP socket to listen on a specific port (e.g., 12345)
             byte[] receiveData = new byte[1024];
