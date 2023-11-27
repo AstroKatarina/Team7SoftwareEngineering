@@ -3,6 +3,8 @@ import java.io.*;
 
 // For sending information to the traffic generator
 public class UDPClient {
+        private static DatagramSocket socket;
+        
         public static void sendData(int Ecode) throws IOException{
            
             if (socket == null || socket.isClosed()) {
