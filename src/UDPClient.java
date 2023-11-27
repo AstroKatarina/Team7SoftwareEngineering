@@ -13,8 +13,8 @@ public class UDPClient {
 
             // Define the server address and port (e.g., localhost and 12345)
             InetAddress serverAddress = InetAddress.getByName("127.0.0.1");
-            int serverPort = 7500;
-        
+            int serverPort = 7501;
+           
             // Initializing packet to null
             byte[] buf = null;
 

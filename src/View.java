@@ -22,6 +22,7 @@ public class View{
 
     public static Timer firstCountDownTimer;
     public static Timer secondCountDownTimer;
+    public static Timer gameLoop;
 
     Controller controller;
 
@@ -57,6 +58,8 @@ public class View{
     JTextField redTeamHeading = new JTextField("Red Team");
     JTextField greenTeamHeadingPlayAction = new JTextField("Green Team Scores");
     JTextField redTeamHeadingPlayAction = new JTextField("Red Team Scores");
+    JTextField greenTeamScoreHeadingPlayAction = new JTextField("0");
+    JTextField redTeamScoreHeadingPlayAction = new JTextField("0");
     JTextField eventsHeadingPlayAction = new JTextField("Events");
     JTextField greenIDHeading = new JTextField("Player ID:");
     JTextField greenNameHeading = new JTextField("Code Name:");
@@ -71,10 +74,13 @@ public class View{
     JPanel panelPromptPopUp = new JPanel();
     JTextField enterEID = new JTextField();
     JTextField entryPrompt = new JTextField();
+
+
     ArrayList<Player> tempPlayersList = new ArrayList<Player>();
     
     //PlayAction Panel objects
     JTextField[] playerScoreFields, playerActionNameFields;
+    public static JTextArea eventTextArea;
     
 
     public View(Controller c) {    
@@ -214,14 +220,14 @@ public class View{
                         
                         try{
                             int id = Integer.parseInt(field.getText());
-                            tempPlayersList.add(new Player(id,null,currentID/14,0));
+                            currentID = id;
+                            tempPlayersList.add(new Player(id,null,(nextIDField-1)/15,0));
                             String codeName = controller.queryHandoff(id);
                             System.out.println("ID: " + field.getText() + " at index " + parallelIndex);
                             field.setBorder(new LineBorder(Color.BLACK,1));
                             // Send ID to controller
                         if(codeName == null)
                         {
-                            currentID = id;
                             playerNameFields[parallelIndex].requestFocus();
                             playerNameFields[parallelIndex].setBorder(new LineBorder(Color.GREEN,1));
                             playerNameFields[parallelIndex].setEditable(true);
@@ -416,20 +422,34 @@ public class View{
         // panelPlayAction.add(upperPanelRight, BorderLayout.NORTH);
         // panelPlayAction.add(lowerPanel, BorderLayout.CENTER); // Takes up the lower half
 
-        //Setup JTextField for the heading above the teams columns
-        greenTeamHeadingPlayAction.setBounds(500,75,140,40);
+        //Setup JTextField for the headings above the teams columns
+        greenTeamHeadingPlayAction.setBounds(frameWidth/2-141,75,140,40);
         greenTeamHeadingPlayAction.setEditable(false);
         greenTeamHeadingPlayAction.setHorizontalAlignment(JTextField.CENTER);
         greenTeamHeadingPlayAction.setBackground(new Color(0,200,0));
         greenTeamHeadingPlayAction.setBorder(new LineBorder(Color.WHITE,2));
         panelPlayAction.add(greenTeamHeadingPlayAction);
         
-        redTeamHeadingPlayAction.setBounds(640, 75, 140, 40);
+        redTeamHeadingPlayAction.setBounds(frameWidth/2+1, 75, 140, 40);
         redTeamHeadingPlayAction.setEditable(false);
         redTeamHeadingPlayAction.setHorizontalAlignment(JTextField.CENTER);
         redTeamHeadingPlayAction.setBackground(new Color(200,0,0));
         redTeamHeadingPlayAction.setBorder(new LineBorder(Color.WHITE,2));
         panelPlayAction.add(redTeamHeadingPlayAction);
+
+        greenTeamScoreHeadingPlayAction.setBounds(frameWidth/2-(142+141),75,140,40);
+        greenTeamScoreHeadingPlayAction.setEditable(false);
+        greenTeamScoreHeadingPlayAction.setHorizontalAlignment(JTextField.CENTER);
+        greenTeamScoreHeadingPlayAction.setBackground(new Color(0,200,0));
+        greenTeamScoreHeadingPlayAction.setBorder(new LineBorder(Color.WHITE,2));
+        panelPlayAction.add(greenTeamScoreHeadingPlayAction);
+        
+        redTeamScoreHeadingPlayAction.setBounds(frameWidth/2+(142+1), 75, 140, 40);
+        redTeamScoreHeadingPlayAction.setEditable(false);
+        redTeamScoreHeadingPlayAction.setHorizontalAlignment(JTextField.CENTER);
+        redTeamScoreHeadingPlayAction.setBackground(new Color(200,0,0));
+        redTeamScoreHeadingPlayAction.setBorder(new LineBorder(Color.WHITE,2));
+        panelPlayAction.add(redTeamScoreHeadingPlayAction);
 
         // eventsHeadingPlayAction.setBounds(600, 375, 80, 40);
         // eventsHeadingPlayAction.setEditable(false);
@@ -454,18 +474,19 @@ public class View{
                 else 
                 {
                      // Add the upper and lower panels to the panelPlayAction
-                   
+                    controller.endGame();
                     countdownField.setText("The Game Has Now Ended");
-                    try {
-                        UDPClient.sendData(221);
-                        UDPClient.sendData(221);
-                        UDPClient.sendData(221);
-                    } catch (IOException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
                     secondCountDownTimer.stop();
                 }
+            }
+        });
+
+        gameLoop = new Timer(0, new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.model.sortPlayerScores();
+                reorderScoreboard();
             }
         });
 
@@ -494,10 +515,14 @@ public class View{
                     if (View.secondCountDownTimer != null && !View.secondCountDownTimer.isRunning()) {
                         View.secondCountDownTimer.start();
                     }
+                    if (View.gameLoop != null && !View.gameLoop.isRunning()) {
+                        View.gameLoop.start();
+                    }
                     firstCountDownTimer.stop();
                 }
             }
         });
+
 
         //Adding presentable countDownField to Play action panel
         countdownField.setBounds(0,10,frameWidth,60);
@@ -550,62 +575,151 @@ public class View{
     public void setupPlayActionPlayers()
     {
         playerScoreFields = new JTextField[30];
-            playerActionNameFields = new JTextField[30];
-            int width = 150, height = 25, verticalSpacing = 3, horizontalSpacing = 2, startX = frameWidth/2-(2*width)-horizontalSpacing, startY = 150, x = startX, y = startY;
+        playerActionNameFields = new JTextField[30];
+        int width = 150, height = 25, verticalSpacing = 3, horizontalSpacing = 2, startX = frameWidth/2-(2*width)-horizontalSpacing, startY = 150, x = startX, y = startY;
+        int lowestY = y;
+        ArrayList<Player> players = controller.getModelPlayerList();
 
-            ArrayList<Player> players = controller.getModelPlayerList();
-
-            for(int i = 0; i<2; i++){
-                int j =0;
-                //Setup the Name column
-                for(Player player : players)
+        for(int i = 0; i<2; i++){
+            int j =0;
+            //Setup the Name column
+            for(Player player : players)
+            {
+                if(player.Team == i)
                 {
-                    if(player.Team == i)
-                    {
-                        playerActionNameFields[j+(15*i)] = new JTextField();
-                        playerActionNameFields[j+(15*i)].setText(player.CodeName);
-                        playerActionNameFields[j+(15*i)].setBounds(x,y,width,height);
-                        playerActionNameFields[j+(15*i)].setBorder(new LineBorder(Color.BLACK,1));
-                        playerActionNameFields[j+(15*i)].setHorizontalAlignment(JTextField.CENTER);
-                        playerActionNameFields[j+(15*i)].setBackground(Color.WHITE);
-                        playerActionNameFields[j+(15*i)].setForeground(Color.BLACK);
-                        playerActionNameFields[j+(15*i)].setEditable(false);
-                        //playerNameFields[j+(15*i)].addActionListener(listenerID);
-                        panelPlayAction.add(playerActionNameFields[j+(15*i)]);
-        
-                        y+= height + verticalSpacing;
-                        j++;
-                    }
-                    
+                    playerActionNameFields[j+(15*i)] = new JTextField();
+                    playerActionNameFields[j+(15*i)].setText(player.CodeName);
+                    playerActionNameFields[j+(15*i)].setBounds(x,y,width,height);
+                    playerActionNameFields[j+(15*i)].setBorder(new LineBorder(Color.BLACK,1));
+                    playerActionNameFields[j+(15*i)].setHorizontalAlignment(JTextField.CENTER);
+                    playerActionNameFields[j+(15*i)].setBackground(Color.WHITE);
+                    playerActionNameFields[j+(15*i)].setForeground(Color.BLACK);
+                    playerActionNameFields[j+(15*i)].setEditable(false);
+                    //playerNameFields[j+(15*i)].addActionListener(listenerID);
+                    panelPlayAction.add(playerActionNameFields[j+(15*i)]);
+    
+                    y+= height + verticalSpacing;
+                    j++;
                 }
-
-                x += width + horizontalSpacing;
-                y = startY;
-                j=0;
-                //Setup the Score column
-                for(Player player : players)
-                {
-                    if(player.Team ==i)
-                    {
-
-                        playerScoreFields[j+(15*i)] = new JTextField();
-                        playerScoreFields[j+(15*i)].setBounds(x,y,width,height);
-                        playerScoreFields[j+(15*i)].setBorder(new LineBorder(Color.BLACK,1));
-                        playerScoreFields[j+(15*i)].setEditable(false);
-                        playerScoreFields[j+(15*i)].setBackground(Color.WHITE);
-                        playerScoreFields[j+(15*i)].setForeground(Color.BLACK);
-                        playerScoreFields[j+(15*i)].setText(Integer.toString(0));
-                        //playerScoreFields[j+(15*i)].addActionListener(listenerName);
-                        panelPlayAction.add(playerScoreFields[j+(15*i)]);
-        
-                        y+= height + verticalSpacing;
-                        j++;
-                    }
-                }
-
-                x += width + horizontalSpacing*4;
-                y = startY;       
+                
             }
+
+            x += width + horizontalSpacing;
+            y = startY;
+            j=0;
+            //Setup the Score column
+            for(Player player : players)
+            {
+                if(player.Team ==i)
+                {
+
+                    playerScoreFields[j+(15*i)] = new JTextField();
+                    playerScoreFields[j+(15*i)].setBounds(x,y,width,height);
+                    playerScoreFields[j+(15*i)].setBorder(new LineBorder(Color.BLACK,1));
+                    playerScoreFields[j+(15*i)].setEditable(false);
+                    playerScoreFields[j+(15*i)].setBackground(Color.WHITE);
+                    playerScoreFields[j+(15*i)].setForeground(Color.BLACK);
+                    playerScoreFields[j+(15*i)].setText(Integer.toString(0));
+                    //playerScoreFields[j+(15*i)].addActionListener(listenerName);
+                    panelPlayAction.add(playerScoreFields[j+(15*i)]);
+    
+                    y+= height + verticalSpacing;
+                    j++;
+                }
+            }
+
+            lowestY = y;
+            x += width + horizontalSpacing*4;
+            y = startY;       
+        }
+
+
+        eventTextArea = new JTextArea();
+        eventTextArea.setEditable(false);
+        JScrollPane eventPane = new JScrollPane(eventTextArea);
+        eventPane.setBounds(15, frameHeight-200, frameWidth-30, 150);
+        eventPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        panelPlayAction.add(eventPane);
+
+
+
+    }
+
+    int countDown = 300;
+
+    public void reorderScoreboard()
+    {
+        int width = 150, height = 25, verticalSpacing = 3, horizontalSpacing = 2, startX = frameWidth/2-(2*width)-horizontalSpacing, startY = 150, x = startX, y = startY;
+        ArrayList<Player> players = controller.getModelPlayerList();
+
+        greenTeamScoreHeadingPlayAction.setText("");
+        redTeamScoreHeadingPlayAction.setText("");
+
+        
+
+        if(0>1)
+        {
+            if(countDown > 0)
+            {
+                countDown--;
+            } else {
+                countDown = 300;
+                greenTeamScoreHeadingPlayAction.setVisible(!greenTeamScoreHeadingPlayAction.isVisible());
+            }
+        } else if(1>0) {
+            if(countDown > 0)
+            {
+                countDown--;
+            } else {
+                countDown = 300;
+                redTeamScoreHeadingPlayAction.setVisible(!greenTeamScoreHeadingPlayAction.isVisible());
+            }
+        } else {
+            greenTeamScoreHeadingPlayAction.setVisible(true);
+            redTeamScoreHeadingPlayAction.setVisible(true);
+            if(countDown > 0)
+            {
+                countDown--;
+            } else {
+                countDown = 300;
+            }
+        }
+
+        for(int i = 0; i<2; i++){
+            int j =0;
+            //Setup the Name column
+            for(Player player : players)
+            {
+                if(player.Team == i)
+                {
+                    playerActionNameFields[j+(15*i)].setText(player.CodeName);
+    
+                    y+= height + verticalSpacing;
+                    j++;
+                }
+                
+            }
+
+            x += width + horizontalSpacing;
+            y = startY;
+            j=0;
+            //Setup the Score column
+            for(Player player : players)
+            {
+                if(player.Team ==i)
+                {
+
+                    playerScoreFields[j+(15*i)].setText(Integer.toString(player.Score));
+    
+                    y+= height + verticalSpacing;
+                    j++;
+                }
+            }
+
+            x += width + horizontalSpacing*4;
+            y = startY;       
+        }
     }
     
 }

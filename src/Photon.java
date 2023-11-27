@@ -1,7 +1,10 @@
 //Software Engineering Team #7
 //Game File for Laser Tag Project
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
+import javax.swing.*;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.SwingUtilities;
@@ -12,36 +15,20 @@ public class Photon
     Controller controller;
     View view;
     DBController dbController = new DBController();
+    MusicPlayer musicPlayer = new MusicPlayer();
+    public static boolean action = false;
 
     public Photon() 
 	{
-        System.out.println("test");
-		this.controller = new Controller(this.model, this.dbController);
+		this.controller = new Controller(this.model, this.dbController, this.musicPlayer);
         view = new View(this.controller);
 
-        // Create instance of UDPServer
-        System.out.println("Creating server");
-        UDPServer udpServer = new UDPServer();
-
-        // Create a thread for the UDPServer
-        Thread serverThread = new Thread(() -> {
-            try {
-                udpServer.startServer();
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("Caught error");
-            }
-        });
-
-        // Thread should run and execute startServer in UDPServer
-        serverThread.start();
 	}
 
 
 	public static void main(String[] args){
 
         Photon photon = new Photon();
-
         TimerTask task = new TimerTask() {
             public void run() {
                 photon.view.cl.show(photon.view.panelContainer,"1");
@@ -62,7 +49,12 @@ public class Photon
                 Test.frameHeight = r.height;*/
                 photon.view.frame.repaint();
                 photon.view.popUpFrame.repaint();
+
             }
         });
+
+
+
+
     }
 }
