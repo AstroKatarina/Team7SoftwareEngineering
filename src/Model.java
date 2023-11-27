@@ -7,6 +7,9 @@ class Model
 {
 
 	static ArrayList<Player> Players;
+
+	public int redTeamScore = 0;
+	public int greenTeamScore= 0;
 	
 	Model()
 	{
@@ -105,6 +108,7 @@ class Model
 		if((hitPlayerID == 53) && (Players.get(foundIndex2).Team == 0)) // Scorer on Green Team
 		{
 			Players.get(foundIndex).Score += 100;
+			greenTeamScore += 100;
 			// Add B next to codename
 		}
 
@@ -112,13 +116,23 @@ class Model
 		if((hitPlayerID == 43) && (Players.get(foundIndex2).Team == 1)) // Scorer on Red Team
 		{
 			Players.get(foundIndex).Score += 100;
+			redTeamScore += 100;
 			// Add B next to codename
 		}
 
 		// Update score
 		Players.get(foundIndex2).Score += 10;
+		if(Players.get(foundIndex2).Team == 0)
+		{
+			greenTeamScore += 10;
+		}
+		if(Players.get(foundIndex2).Team == 1)
+		{
+			redTeamScore += 10;
+		}
 
 		// Check for Team Kill
+		// If team kill send own eqipment ID
 		if(Players.get(foundIndex).Team == Players.get(foundIndex2).Team)
 		{
 			try {
@@ -128,6 +142,7 @@ class Model
 				e.printStackTrace();
 			}
 		}
+		// Otherwise send hit player's ID
 		else
 		{
 			try {
