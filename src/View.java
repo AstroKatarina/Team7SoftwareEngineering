@@ -388,33 +388,7 @@ public class View{
 
         //setting up play action screen
 
-         //adding player scores (upper) and Events (lower) panels onto Play Action panel 
-        // // Create the upper panel
-        // upperPanel = new JPanel();
-        // upperPanel.setLayout(new BorderLayout()); 
-        // // Add your components to the upper panel
-        // upperPanel.setBounds(0, 100, 640, 300);
-        // upperPanel.setBackground(Color.GREEN);
-        // //upperPanel.setEditable(false);
-        // upperPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 0));
-
-        // upperPanelRight = new JPanel();
-        // upperPanelRight.setLayout(new BorderLayout());
-        // upperPanelRight.setBounds(640, 100, 640, 300);
-        // upperPanelRight.setBackground(Color.RED);
-
-        //  // Create the lower panel
-        //  lowerPanel = new JPanel();
-        //  lowerPanel.setLayout(new BorderLayout()); 
-        //  // Add your components to the lower panel
-        // lowerPanel.setBounds(0, 400, 1280, 350);
-        // lowerPanel.setBackground(Color.YELLOW);
-        // //lowerPanel.setEditable(false);
-        // lowerPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 0));
-
-        // panelPlayAction.add(upperPanel, BorderLayout.NORTH); // Takes up the upper half
-        // panelPlayAction.add(upperPanelRight, BorderLayout.NORTH);
-        // panelPlayAction.add(lowerPanel, BorderLayout.CENTER); // Takes up the lower half
+         
 
         //Setup JTextField for the heading above the teams columns
         greenTeamHeadingPlayAction.setBounds(500,75,140,40);
@@ -609,5 +583,3 @@ public class View{
     }
     
 }
-
-
