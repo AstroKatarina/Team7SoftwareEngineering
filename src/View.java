@@ -69,8 +69,9 @@ public class View{
     JTextArea f12IntructionHeading = new JTextArea("Press F12 to Clear Entries");
     Font titleFont = new Font("Serif",Font.BOLD,30);
     Color playerEntryBackgroundColor = new Color(200,205,210);
+    
     //Delcare and initialize objects for the EID Prompt Popup
-    JFrame popUpFrame = new JFrame("Enter Equipment ID");
+    JFrame eidPopUpFrame = new JFrame("Enter Equipment ID");
     JPanel panelPromptPopUp = new JPanel();
     JTextField enterEID = new JTextField();
     JTextField entryPrompt = new JTextField();
@@ -79,8 +80,14 @@ public class View{
     ArrayList<Player> tempPlayersList = new ArrayList<Player>();
     
     //PlayAction Panel objects
-    JTextField[] playerScoreFields, playerActionNameFields;
+    JTextField[] playerScoreFields, playerActionNameFields, stylizedBFields;
     public static JTextArea eventTextArea;
+
+    //Delcare and initialize objects for the Restart Prompt Popup
+    JFrame restartPopUpFrame = new JFrame("Enter Equipment ID");
+    JPanel restartPanelPromptPopUp = new JPanel();
+    JButton restartButton = new JButton("Restart Game");
+    JButton exitButton = new JButton("Exit Game");
     
 
     public View(Controller c) {    
@@ -115,9 +122,12 @@ public class View{
         panelPlayAction.setLayout(null);
         panelPromptPopUp.setLayout(null);
         panelCountDown.setLayout(null);
+        restartPanelPromptPopUp.setLayout(null);
         panelPromptPopUp.setBackground(playerEntryBackgroundColor);
         panelPlayerEntry.setBackground(playerEntryBackgroundColor);
         panelCountDown.setBackground(playerEntryBackgroundColor);
+        panelPlayAction.setBackground(playerEntryBackgroundColor);
+        restartPanelPromptPopUp.setBackground(playerEntryBackgroundColor);
 
         //Add panels to the container panel set up with CardLayout
         panelContainer.add(panelStartup,"0");
@@ -135,12 +145,19 @@ public class View{
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        //Setup the popup frame and add the panel to it
-        popUpFrame.add(panelPromptPopUp);
-        popUpFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        popUpFrame.setSize(popUpFrameWidth, popUpFrameHeight);
-        popUpFrame.setLocationRelativeTo(frame);
-        popUpFrame.setVisible(false);
+        //Setup the eid popup frame and add the panel to it
+        eidPopUpFrame.add(panelPromptPopUp);
+        eidPopUpFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        eidPopUpFrame.setSize(popUpFrameWidth, popUpFrameHeight);
+        eidPopUpFrame.setLocationRelativeTo(frame);
+        eidPopUpFrame.setVisible(false);
+
+        //Setup the restart popup frame and add the panel to it
+        restartPopUpFrame.add(restartPanelPromptPopUp);
+        restartPopUpFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        restartPopUpFrame.setSize(popUpFrameWidth, popUpFrameHeight);
+        restartPopUpFrame.setLocationRelativeTo(frame);
+        restartPopUpFrame.setVisible(false);
 
 
 
@@ -160,7 +177,7 @@ public class View{
                             
                             field.setBorder(new LineBorder(Color.BLACK,1));
                             field.setText(null);
-                            popUpFrame.setVisible(false);
+                            eidPopUpFrame.setVisible(false);
 
                             if(nextIDField<playerIDFields.length){
                                 playerIDFields[nextIDField].requestFocus();
@@ -183,7 +200,7 @@ public class View{
                 }
         };
 
-        //Setup the popup panel
+        //Setup the EID popup panel
         int entryWidth = 50, entryHeight=25;
         enterEID.setBounds(popUpFrameWidth/2-entryWidth/2,popUpFrameHeight/2+entryHeight/2,entryWidth,entryHeight);
         enterEID.setHorizontalAlignment(JTextField.CENTER);
@@ -197,6 +214,30 @@ public class View{
         entryPrompt.setEditable(false);
         entryPrompt.setBackground(null);
         panelPromptPopUp.add(entryPrompt);
+
+        //Setup the restart popup panel
+        restartButton.setBounds(popUpFrameWidth/2-entryWidth, popUpFrameHeight/4-entryHeight, entryWidth*2, entryHeight*2);
+        restartButton.setHorizontalAlignment(JTextField.CENTER);
+        restartButton.setBorder(new LineBorder(Color.BLACK,1));
+        restartButton.setBackground(Color.WHITE);
+        restartButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                controller.restartGame();
+                restartPopUpFrame.setVisible(false);
+            }
+        });
+        restartPanelPromptPopUp.add(restartButton);
+    
+        exitButton.setBounds(popUpFrameWidth/2-entryWidth, (3*popUpFrameHeight)/4-2*entryHeight, entryWidth*2, entryHeight*2);
+        exitButton.setHorizontalAlignment(JTextField.CENTER);
+        exitButton.setBorder(new LineBorder(Color.BLACK,1));
+        exitButton.setBackground(Color.WHITE);
+        exitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                System.exit(0);
+            }
+        });
+        restartPanelPromptPopUp.add(exitButton);
 
 
         //Set up the Player Entry Title
@@ -235,8 +276,8 @@ public class View{
                             tempPlayersList.get(tempPlayersList.size()-1).CodeName = codeName;
                             playerNameFields[parallelIndex].setText(codeName);
                             entryPrompt.setText("Enter " + codeName + "'s equipment ID and press return.");
-                            popUpFrame.setVisible(true);
-                            popUpFrame.toFront();
+                            eidPopUpFrame.setVisible(true);
+                            eidPopUpFrame.toFront();
                             enterEID.requestFocus();
                             
                             
@@ -266,8 +307,8 @@ public class View{
                         field.setBorder(new LineBorder(Color.BLACK,1));
 
                         entryPrompt.setText("Enter " + field.getText() + "'s equipment ID and press return.");
-                        popUpFrame.setVisible(true);
-                        popUpFrame.toFront();
+                        eidPopUpFrame.setVisible(true);
+                        eidPopUpFrame.toFront();
                         enterEID.requestFocus();
 
                     }
@@ -394,34 +435,6 @@ public class View{
 
         //setting up play action screen
 
-         //adding player scores (upper) and Events (lower) panels onto Play Action panel 
-        // // Create the upper panel
-        // upperPanel = new JPanel();
-        // upperPanel.setLayout(new BorderLayout()); 
-        // // Add your components to the upper panel
-        // upperPanel.setBounds(0, 100, 640, 300);
-        // upperPanel.setBackground(Color.GREEN);
-        // //upperPanel.setEditable(false);
-        // upperPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 0));
-
-        // upperPanelRight = new JPanel();
-        // upperPanelRight.setLayout(new BorderLayout());
-        // upperPanelRight.setBounds(640, 100, 640, 300);
-        // upperPanelRight.setBackground(Color.RED);
-
-        //  // Create the lower panel
-        //  lowerPanel = new JPanel();
-        //  lowerPanel.setLayout(new BorderLayout()); 
-        //  // Add your components to the lower panel
-        // lowerPanel.setBounds(0, 400, 1280, 350);
-        // lowerPanel.setBackground(Color.YELLOW);
-        // //lowerPanel.setEditable(false);
-        // lowerPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 0));
-
-        // panelPlayAction.add(upperPanel, BorderLayout.NORTH); // Takes up the upper half
-        // panelPlayAction.add(upperPanelRight, BorderLayout.NORTH);
-        // panelPlayAction.add(lowerPanel, BorderLayout.CENTER); // Takes up the lower half
-
         //Setup JTextField for the headings above the teams columns
         greenTeamHeadingPlayAction.setBounds(frameWidth/2-141,75,140,40);
         greenTeamHeadingPlayAction.setEditable(false);
@@ -450,15 +463,6 @@ public class View{
         redTeamScoreHeadingPlayAction.setBackground(new Color(200,0,0));
         redTeamScoreHeadingPlayAction.setBorder(new LineBorder(Color.WHITE,2));
         panelPlayAction.add(redTeamScoreHeadingPlayAction);
-
-        // eventsHeadingPlayAction.setBounds(600, 375, 80, 40);
-        // eventsHeadingPlayAction.setEditable(false);
-        // eventsHeadingPlayAction.setHorizontalAlignment(JTextField.CENTER);
-        // eventsHeadingPlayAction.setBackground(Color.YELLOW);
-        // eventsHeadingPlayAction.setBorder(new LineBorder(Color.BLACK, 2));
-        // panelPlayAction.add(eventsHeadingPlayAction);
-        //panelPlayAction.add(greenTeamHeading);
-        //panelPlayAction.add(redTeamHeading);
 
         //Setting up Timer on Top of Play Action Screen
         JTextField countdownField = new JTextField("Get Ready!");
@@ -576,6 +580,7 @@ public class View{
     {
         playerScoreFields = new JTextField[30];
         playerActionNameFields = new JTextField[30];
+        stylizedBFields = new JTextField[30];
         int width = 150, height = 25, verticalSpacing = 3, horizontalSpacing = 2, startX = frameWidth/2-(2*width)-horizontalSpacing, startY = 150, x = startX, y = startY;
         int lowestY = y;
         ArrayList<Player> players = controller.getModelPlayerList();
@@ -587,6 +592,16 @@ public class View{
             {
                 if(player.Team == i)
                 {
+                    stylizedBFields[j+(15*i)] = new JTextField();
+                    stylizedBFields[j+(15*i)].setText("B");
+                    stylizedBFields[j+(15*i)].setBounds(x-(25+horizontalSpacing)+i*(width*2+horizontalSpacing*2+25+horizontalSpacing),y,25,height);
+                    stylizedBFields[j+(15*i)].setBorder(new LineBorder(Color.BLACK,0));
+                    stylizedBFields[j+(15*i)].setHorizontalAlignment(JTextField.CENTER);
+                    stylizedBFields[j+(15*i)].setBackground(null);
+                    stylizedBFields[j+(15*i)].setForeground(Color.BLACK);
+                    stylizedBFields[j+(15*i)].setEditable(false);
+                    panelPlayAction.add(stylizedBFields[j+(15*i)]);
+
                     playerActionNameFields[j+(15*i)] = new JTextField();
                     playerActionNameFields[j+(15*i)].setText(player.CodeName);
                     playerActionNameFields[j+(15*i)].setBounds(x,y,width,height);
@@ -647,44 +662,14 @@ public class View{
     }
 
     int countDown = 300;
-
+    int tempGreenScore, tempRedScore;
     public void reorderScoreboard()
     {
         int width = 150, height = 25, verticalSpacing = 3, horizontalSpacing = 2, startX = frameWidth/2-(2*width)-horizontalSpacing, startY = 150, x = startX, y = startY;
         ArrayList<Player> players = controller.getModelPlayerList();
 
-        greenTeamScoreHeadingPlayAction.setText("");
-        redTeamScoreHeadingPlayAction.setText("");
-
-        
-
-        if(0>1)
-        {
-            if(countDown > 0)
-            {
-                countDown--;
-            } else {
-                countDown = 300;
-                greenTeamScoreHeadingPlayAction.setVisible(!greenTeamScoreHeadingPlayAction.isVisible());
-            }
-        } else if(1>0) {
-            if(countDown > 0)
-            {
-                countDown--;
-            } else {
-                countDown = 300;
-                redTeamScoreHeadingPlayAction.setVisible(!greenTeamScoreHeadingPlayAction.isVisible());
-            }
-        } else {
-            greenTeamScoreHeadingPlayAction.setVisible(true);
-            redTeamScoreHeadingPlayAction.setVisible(true);
-            if(countDown > 0)
-            {
-                countDown--;
-            } else {
-                countDown = 300;
-            }
-        }
+        tempGreenScore = 0;
+        tempRedScore = 0;
 
         for(int i = 0; i<2; i++){
             int j =0;
@@ -693,6 +678,14 @@ public class View{
             {
                 if(player.Team == i)
                 {
+                    
+                    if(player.BaseHit)
+                    {
+                        stylizedBFields[j+(15*i)].setVisible(true);
+                    } else {
+                        stylizedBFields[j+(15*i)].setVisible(false);
+                    }
+
                     playerActionNameFields[j+(15*i)].setText(player.CodeName);
     
                     y+= height + verticalSpacing;
@@ -704,6 +697,7 @@ public class View{
             x += width + horizontalSpacing;
             y = startY;
             j=0;
+
             //Setup the Score column
             for(Player player : players)
             {
@@ -711,6 +705,12 @@ public class View{
                 {
 
                     playerScoreFields[j+(15*i)].setText(Integer.toString(player.Score));
+                    if(i==0){
+                        tempGreenScore+=player.Score;
+                    }
+                    if(i==1){
+                        tempRedScore+=player.Score;
+                    }
     
                     y+= height + verticalSpacing;
                     j++;
@@ -719,6 +719,42 @@ public class View{
 
             x += width + horizontalSpacing*4;
             y = startY;       
+        }
+
+        Model.greenTeamScore = tempGreenScore;
+        Model.redTeamScore = tempRedScore;
+
+        greenTeamScoreHeadingPlayAction.setText(Integer.toString(Model.greenTeamScore));
+        redTeamScoreHeadingPlayAction.setText(Integer.toString(Model.redTeamScore));
+
+        
+
+        if(Model.greenTeamScore > Model.redTeamScore)
+        {
+            if(countDown > 0)
+            {
+                countDown--;
+            } else {
+                countDown = 300;
+                greenTeamScoreHeadingPlayAction.setVisible(!greenTeamScoreHeadingPlayAction.isVisible());
+            }
+        } else if(Model.redTeamScore>Model.greenTeamScore) {
+            if(countDown > 0)
+            {
+                countDown--;
+            } else {
+                countDown = 300;
+                redTeamScoreHeadingPlayAction.setVisible(!redTeamScoreHeadingPlayAction.isVisible());
+            }
+        } else {
+            greenTeamScoreHeadingPlayAction.setVisible(true);
+            redTeamScoreHeadingPlayAction.setVisible(true);
+            if(countDown > 0)
+            {
+                countDown--;
+            } else {
+                countDown = 300;
+            }
         }
     }
     

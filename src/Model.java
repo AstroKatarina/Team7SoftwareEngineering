@@ -108,9 +108,9 @@ class Model
 		if((hitPlayerID == 53) && (Players.get(foundIndex2).Team == 0)) // Scorer on Green Team
 		{
 			Players.get(foundIndex).Score += 100;
+			Players.get(foundIndex).BaseHit = true;
 			View.eventTextArea.append(Players.get(foundIndex2).CodeName + " has hit the base and now has a score of " + Players.get(foundIndex2).Score+"\n");
 			View.eventTextArea.setCaretPosition(View.eventTextArea.getDocument().getLength());
-			greenTeamScore += 100;
 			// Add B next to codename
 		}
 
@@ -118,9 +118,9 @@ class Model
 		else if((hitPlayerID == 43) && (Players.get(foundIndex2).Team == 1)) // Scorer on Red Team
 		{
 			Players.get(foundIndex).Score += 100;
+			Players.get(foundIndex).BaseHit = true;
 			View.eventTextArea.append(Players.get(foundIndex2).CodeName + " has hit the base and now has a score of " + Players.get(foundIndex2).Score+"\n");
 			View.eventTextArea.setCaretPosition(View.eventTextArea.getDocument().getLength());
-			redTeamScore += 100;
 			// Add B next to codename
 		}
 
@@ -130,14 +130,6 @@ class Model
 			System.out.println(Players.get(foundIndex2).CodeName + " has hit " + Players.get(foundIndex).CodeName + " and now has a score of " + Players.get(foundIndex2).Score+"\n");
 			View.eventTextArea.append(Players.get(foundIndex2).CodeName + " has hit " + Players.get(foundIndex).CodeName + " and now has a score of " + Players.get(foundIndex2).Score+"\n");
 			View.eventTextArea.setCaretPosition(View.eventTextArea.getDocument().getLength());
-			if(Players.get(foundIndex2).Team == 0)
-			{
-				greenTeamScore += 10;
-			}
-			if(Players.get(foundIndex2).Team == 1)
-			{
-				redTeamScore += 10;
-			}
 		}	
 		
 
@@ -173,7 +165,7 @@ class Model
 			player1 = Players.get(i);
 			temp = player1;
 			highestIndex = i;
-			for(int j = 0; j < Players.size(); j++)
+			for(int j = i; j < Players.size(); j++)
 			{
 				player2 = Players.get(j);
 				if (player1!=player2)
