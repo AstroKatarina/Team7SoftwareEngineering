@@ -7,6 +7,9 @@ class Model
 {
 
 	static ArrayList<Player> Players;
+
+	public static int redTeamScore = 0;
+	public static int greenTeamScore= 0;
 	
 	Model()
 	{
@@ -105,6 +108,7 @@ class Model
 		if((hitPlayerID == 53) && (Players.get(foundIndex2).Team == 0)) // Scorer on Green Team
 		{
 			Players.get(foundIndex).Score += 100;
+			Players.get(foundIndex).BaseHit = true;
 			View.eventTextArea.append(Players.get(foundIndex2).CodeName + " has hit the base and now has a score of " + Players.get(foundIndex2).Score+"\n");
 			View.eventTextArea.setCaretPosition(View.eventTextArea.getDocument().getLength());
 			// Add B next to codename
@@ -114,6 +118,7 @@ class Model
 		else if((hitPlayerID == 43) && (Players.get(foundIndex2).Team == 1)) // Scorer on Red Team
 		{
 			Players.get(foundIndex).Score += 100;
+			Players.get(foundIndex).BaseHit = true;
 			View.eventTextArea.append(Players.get(foundIndex2).CodeName + " has hit the base and now has a score of " + Players.get(foundIndex2).Score+"\n");
 			View.eventTextArea.setCaretPosition(View.eventTextArea.getDocument().getLength());
 			// Add B next to codename
@@ -126,8 +131,10 @@ class Model
 			View.eventTextArea.append(Players.get(foundIndex2).CodeName + " has hit " + Players.get(foundIndex).CodeName + " and now has a score of " + Players.get(foundIndex2).Score+"\n");
 			View.eventTextArea.setCaretPosition(View.eventTextArea.getDocument().getLength());
 		}	
+		
 
 		// Check for Team Kill
+		// If team kill send own eqipment ID
 		if(Players.get(foundIndex).Team == Players.get(foundIndex2).Team)
 		{
 			try {
@@ -137,6 +144,7 @@ class Model
 				e.printStackTrace();
 			}
 		}
+		// Otherwise send hit player's ID
 		else
 		{
 			try {
@@ -157,7 +165,7 @@ class Model
 			player1 = Players.get(i);
 			temp = player1;
 			highestIndex = i;
-			for(int j = 0; j < Players.size(); j++)
+			for(int j = i; j < Players.size(); j++)
 			{
 				player2 = Players.get(j);
 				if (player1!=player2)

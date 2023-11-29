@@ -48,7 +48,7 @@ public class Photon
                 Test.frameWidth = r.width;
                 Test.frameHeight = r.height;*/
                 photon.view.frame.repaint();
-                photon.view.popUpFrame.repaint();
+                photon.view.eidPopUpFrame.repaint();
 
             }
         });

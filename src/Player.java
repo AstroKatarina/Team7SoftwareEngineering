@@ -6,6 +6,7 @@ class Player
     int Team;
     // Green==0 red==1
     int EquipmentID;
+    boolean BaseHit;
 
     Player()
     {

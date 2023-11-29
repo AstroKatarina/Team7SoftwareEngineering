@@ -18,6 +18,7 @@ class Controller implements ActionListener, MouseListener, KeyListener
     Model model;
     DBController dbController;
     MusicPlayer musicPlayer;
+    Thread serverThread;
 
 	Controller(Model m, DBController db, MusicPlayer mp) 
 	{
@@ -85,9 +86,6 @@ class Controller implements ActionListener, MouseListener, KeyListener
                     clearEntries();
                     break;
                 case KeyEvent.VK_F5:
-                    if (View.firstCountDownTimer != null && !View.firstCountDownTimer.isRunning()) {
-                        View.firstCountDownTimer.start();
-                    }
                     startGame();
                     musicPlayer.startPlayingWAV();
 
@@ -122,6 +120,9 @@ class Controller implements ActionListener, MouseListener, KeyListener
 
     private void startGame()
     {
+        if (View.firstCountDownTimer != null && !View.firstCountDownTimer.isRunning()) {
+            View.firstCountDownTimer.start();
+        }
         Photon.action = true;
         view.cl.show(view.panelContainer,"2");
         view.setPlayersList();
@@ -132,7 +133,7 @@ class Controller implements ActionListener, MouseListener, KeyListener
         UDPServer udpServer = new UDPServer();
 
         // Create a thread for the UDPServer
-        Thread serverThread = new Thread(() -> {
+        serverThread = new Thread(() -> {
             try {
                 udpServer.startServer();
             } catch (IOException e) {
@@ -156,6 +157,9 @@ class Controller implements ActionListener, MouseListener, KeyListener
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
+        view.restartPopUpFrame.setVisible(true);
+        view.restartPopUpFrame.toFront();
+        
     }
     
 
@@ -170,6 +174,12 @@ class Controller implements ActionListener, MouseListener, KeyListener
             field.setText(null);
         }
         view.tempPlayersList.clear();
+    }
+
+    private void actionClearEntries()
+    {
+        view.setupPlayActionPlayers();
+        View.eventTextArea.setText("");
     }
 
     public void setID(int ID){
@@ -215,4 +225,20 @@ class Controller implements ActionListener, MouseListener, KeyListener
         view.reorderScoreboard();
     }
     
+    public void restartGame()
+    {
+        Model.Players.clear();
+        if (View.gameLoop != null && View.gameLoop.isRunning()) {
+            View.gameLoop.stop();
+        }
+        if(serverThread != null && serverThread.isAlive())
+        {
+            serverThread.interrupt();
+        }
+        clearEntries();
+        actionClearEntries();
+        view.cl.show(view.panelContainer,"1");
+        view.playerIDFields[0].requestFocus();
+        
+    }
 }
